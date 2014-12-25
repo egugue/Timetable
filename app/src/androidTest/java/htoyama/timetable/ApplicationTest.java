@@ -1,6 +1,7 @@
 package htoyama.timetable;
 
 import android.app.Application;
+import android.test.ActivityInstrumentationTestCase2;
 import android.test.ApplicationTestCase;
 
 /**
