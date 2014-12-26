@@ -10,4 +10,11 @@ public class BaseInfo {
     public String train;
     public String boundForName;
 
+    public BaseInfo(int id, String station, String train, String boundForName) {
+        this.id = id;
+        this.station = station;
+        this.train = train;
+        this.boundForName = boundForName;
+    }
+
 }

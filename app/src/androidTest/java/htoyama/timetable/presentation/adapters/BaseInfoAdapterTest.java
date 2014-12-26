@@ -15,16 +15,16 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 @RunWith(Enclosed.class)
-public class TimetableAdapterTest {
+public class BaseInfoAdapterTest {
 
 
     public static class 初期状態が空だった場合 {
-        private TimetableAdapter sut;
+        private BaseInfoAdapter sut;
 
         @Before
         public void setUp() {
             Context context = InstrumentationRegistry.getContext();
-            sut = new TimetableAdapter(context);
+            sut = new BaseInfoAdapter(context);
         }
 
         @Test
@@ -35,7 +35,7 @@ public class TimetableAdapterTest {
     }
 
     public static class 初期状態が2つ登録されていた場合 {
-        private TimetableAdapter sut;
+        private BaseInfoAdapter sut;
 
         @Before
         public void setUp() {
@@ -44,7 +44,7 @@ public class TimetableAdapterTest {
             list.add(1);
 
             Context context = InstrumentationRegistry.getContext();
-            sut = new TimetableAdapter(context, list);
+            sut = new BaseInfoAdapter(context, list);
         }
 
         @Test
