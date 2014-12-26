@@ -3,14 +3,20 @@ package htoyama.timetable.presentation.activities;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import htoyama.timetable.R;
 import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.presentation.adapters.TimetablePagerAdapter;
@@ -19,21 +25,18 @@ import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
 
-public class TimetableActivity extends BaseActivity implements MaterialTabListener {
+public class TimetableActivity extends BaseActivity
+        implements MaterialTabListener, TimetablePagerAdapter.OnStateChangeListener {
+
     private TimetableAdapter mTimetableAdapter;
-
-    /*
-    @InjectView(R.id.timetable_header)
-    View mHeaderView;
-
-    @InjectView(R.id.timetable_list)
-    RecyclerView mTimetableRecyclerView;
-    */
-
     private MaterialTabHost mTabHost;
     private ViewPager mViewPager;
 
+    @InjectView(R.id.timetable_wraping_layout)
+    FrameLayout mWrapingFrameLayout;
 
+    @InjectView(R.id.timetable_header)
+    View mHeaderView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +44,55 @@ public class TimetableActivity extends BaseActivity implements MaterialTabListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timetable);
         ButterKnife.inject(this);
+
+        ViewTreeObserver vto = mWrapingFrameLayout.getViewTreeObserver();
+        if (vto.isAlive()) {
+            vto.addOnGlobalLayoutListener(mGlobalLayoutListener);
+        }
+
         setupToolbar();
         setupTab();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mWrapingFrameLayout == null) {
+            return;
+        }
+
+        ViewTreeObserver vto = mWrapingFrameLayout.getViewTreeObserver();
+        if (vto.isAlive()) {
+            vto.removeOnGlobalLayoutListener(mGlobalLayoutListener);
+        }
+    }
+
+    private boolean isHideBar = false;
+
+    @Override
+    public void onScrolledTimetable(RecyclerView recyclerView, int dx, int dy) {
+        if (dy < 0) {
+            return;
+        }
+
+        if (!isHideBar) {
+            isHideBar = true;
+            int height = getToolbar().getHeight();
+            mHeaderView.setTranslationY(-height);
+
+            ViewPager.MarginLayoutParams mlp = (ViewPager.MarginLayoutParams)
+                    mViewPager.getLayoutParams();
+            mlp.topMargin -= height;
+            mViewPager.setLayoutParams(mlp);
+        }
+    }
+
+    private void recomputeMetrics() {
+        ViewPager.MarginLayoutParams mlp = (ViewPager.MarginLayoutParams)
+                mViewPager.getLayoutParams();
+
+        mlp.topMargin = mHeaderView.getHeight();
+        mViewPager.setLayoutParams(mlp);
     }
 
     private void setupToolbar() {
@@ -50,7 +100,9 @@ public class TimetableActivity extends BaseActivity implements MaterialTabListen
     }
 
     private void setupTab() {
+
         final TimetablePagerAdapter pagerAdapter = new TimetablePagerAdapter();
+        pagerAdapter.setOnStateChangeLister(this);
 
         mTabHost = (MaterialTabHost) this.findViewById(R.id.tabHost);
 
@@ -75,33 +127,6 @@ public class TimetableActivity extends BaseActivity implements MaterialTabListen
         }
 
     }
-
-    /*
-    private void setupTab() {
-
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        mViewPager.setAdapter(new TimetablePagerAdapter(this));
-        for (int i = 0; i < mViewPager.getAdapter().getCount(); i++ ){
-        }
-
-        // BEGIN_INCLUDE (setup_slidingtablayout)
-        // Give the SlidingTabLayout the ViewPager, this must be done AFTER the ViewPager has had
-        // it's PagerAdapter set.
-        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
-        mSlidingTabLayout.setViewPager(mViewPager);
-    }
-    */
-
-    /*
-    private void setupTimetable() {
-        mTimetableAdapter = new TimetableAdapter(this, getListStub());
-
-        //mTimetableRecyclerView.setHasFixedSize(true);
-        mTimetableRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mTimetableRecyclerView.setAdapter(mTimetableAdapter);
-        mTimetableRecyclerView.setAnimation(null);
-    }
-    */
 
     private List<Timetable> getListStub() {
         List<Timetable> timetableList = new ArrayList<>();
@@ -141,4 +166,14 @@ public class TimetableActivity extends BaseActivity implements MaterialTabListen
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener
+            = new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+            recomputeMetrics();
+            mWrapingFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        }
+    };
+
 }

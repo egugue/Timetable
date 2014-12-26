@@ -15,6 +15,7 @@ import java.util.List;
 
 import htoyama.timetable.R;
 import htoyama.timetable.domain.models.Timetable;
+import htoyama.timetable.presentation.views.DividerItemDecoration;
 
 /**
  * Created by toyamaosamuyu on 2014/12/26.
@@ -24,6 +25,16 @@ public class TimetablePagerAdapter extends PagerAdapter{
 
     private RecyclerView mTimetableRecyclerView;
     private TimetableAdapter mTimetableAdapter;
+    private OnStateChangeListener mStateChangeListener;
+    private DividerItemDecoration mDividerItemDecoration;
+
+    public static interface OnStateChangeListener {
+        public void onScrolledTimetable(RecyclerView recyclerView, int dx, int dy);
+    }
+
+    public void setOnStateChangeLister(OnStateChangeListener lister) {
+        mStateChangeListener = lister;
+    }
 
     @Override
     public int getCount() {
@@ -66,12 +77,25 @@ public class TimetablePagerAdapter extends PagerAdapter{
     }
 
     private void setupTimetable(final Context context) {
+        if (mDividerItemDecoration == null) {
+            mDividerItemDecoration = new DividerItemDecoration(context);
+        }
         mTimetableAdapter = new TimetableAdapter(context, getListStub());
 
         mTimetableRecyclerView.setHasFixedSize(true);
         mTimetableRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mTimetableRecyclerView.setAdapter(mTimetableAdapter);
         mTimetableRecyclerView.setAnimation(null);
+        mTimetableRecyclerView.addItemDecoration(mDividerItemDecoration);
+
+        mTimetableRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (mStateChangeListener != null) {
+                    mStateChangeListener.onScrolledTimetable(recyclerView, dx, dy);
+                }
+            }
+        });
     }
 
     private List<Timetable> getListStub() {
