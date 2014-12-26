@@ -1,14 +1,11 @@
 package htoyama.timetable.presentation.activities;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
@@ -28,9 +25,9 @@ import it.neokree.materialtabs.MaterialTabListener;
 public class TimetableActivity extends BaseActivity
         implements MaterialTabListener, TimetablePagerAdapter.OnStateChangeListener {
 
-    private TimetableAdapter mTimetableAdapter;
     private MaterialTabHost mTabHost;
     private ViewPager mViewPager;
+    private boolean isHideBar = false;
 
     @InjectView(R.id.timetable_wraping_layout)
     FrameLayout mWrapingFrameLayout;
@@ -67,7 +64,6 @@ public class TimetableActivity extends BaseActivity
         }
     }
 
-    private boolean isHideBar = false;
 
     @Override
     public void onScrolledTimetable(RecyclerView recyclerView, int dx, int dy) {
@@ -115,7 +111,6 @@ public class TimetableActivity extends BaseActivity
                 mTabHost.setSelectedNavigationItem(position);
             }
         });
-
 
         final int size = pagerAdapter.getCount();
         for (int i = 0; i < size; i++ ){
