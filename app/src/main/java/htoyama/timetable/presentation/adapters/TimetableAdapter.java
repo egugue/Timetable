@@ -2,6 +2,7 @@ package htoyama.timetable.presentation.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,39 +12,41 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import htoyama.timetable.R;
-
+import htoyama.timetable.domain.models.Timetable;
 
 /**
  * Created by toyamaosamuyu on 2014/12/26.
  */
 public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.ViewHolder>{
     private static final String TAG = TimetableAdapter.class.getSimpleName();
+
     private Context mContext;
-    private List<Integer> mList;
+    private List<Timetable> mList;
 
     public TimetableAdapter(Context context) {
         mContext = context;
-        mList = new ArrayList<>();
+        mList = new ArrayList<Timetable>();
     }
 
-    public TimetableAdapter(Context context, List<Integer> list) {
-        mContext = context;
+    public TimetableAdapter(Context context, List<Timetable> list) {
+        mContext =context;
         mList = list;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater. from(parent.getContext())
-               .inflate(R.layout.list_item_card_big, null);
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_item_timetable, parent, false);
 
-        return new ViewHolder(view);
+        return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Integer item = mList.get(position);
-        holder.bind(item);
+        holder.bind( mList.get(position) );
     }
 
     @Override
@@ -51,23 +54,24 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
         return mList.size();
     }
 
-    public void addAll(List<Integer> list) {
-        mList = list;
-        notifyDataSetChanged();
-    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView mThumbnailImageView;
-        private TextView mDestTextView;
+
+        @InjectView(R.id.list_item_timetable_depature_time)
+        TextView mDepartureTimeTextView;
+        @InjectView(R.id.list_item_timetable_train_type)
+        TextView mTrainTypeTextView;
+        @InjectView(R.id.list_item_timetable_destination)
+        TextView mDestinationTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mThumbnailImageView = (ImageView) itemView.findViewById(R.id.list_item_card_big_thumbnail);
-            mDestTextView = (TextView) itemView.findViewById(R.id.list_item_card_big_dest_text);
+            ButterKnife.inject(this, itemView);
         }
 
-        public void bind(Integer item) {
-           mDestTextView.setText(item.toString());
+        public void bind(Timetable item) {
+            mDepartureTimeTextView.setText(item.id+":00");
         }
     }
+
 }

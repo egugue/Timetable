@@ -1,10 +1,12 @@
 package htoyama.timetable.presentation.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +14,12 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import htoyama.timetable.R;
-import htoyama.timetable.presentation.adapters.TimetableAdapter;
+import htoyama.timetable.presentation.adapters.BaseInfoAdapter;
 
 
 public class TopActivity extends BaseActivity {
 
-    private TimetableAdapter mTimetableAdapter;
+    private BaseInfoAdapter mBaseInfoAdapter;
 
     @InjectView(R.id.top_timetable_list)
     RecyclerView mTimetableRecyclerView;
@@ -32,12 +34,19 @@ public class TopActivity extends BaseActivity {
     }
 
     private void setupRecyclerView() {
-        mTimetableAdapter = new TimetableAdapter(this, getListStub());
+        mBaseInfoAdapter = new BaseInfoAdapter(this, getListStub());
 
         mTimetableRecyclerView.setHasFixedSize(true);
         mTimetableRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mTimetableRecyclerView.setAdapter(mTimetableAdapter);
+        mTimetableRecyclerView.setAdapter(mBaseInfoAdapter);
         mTimetableRecyclerView.setAnimation(null);
+        getToolbar().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TimetableActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private List<Integer> getListStub() {
