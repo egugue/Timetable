@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<htoyama.timetable.presentation.views.StateFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pager_item_state_frame_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/pager_item_timetable_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</htoyama.timetable.presentation.views.StateFrameLayout>
+<!--
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/pager_item_timetable_list"
@@ -11,3 +27,4 @@
         />
 
 </LinearLayout>
+    -->

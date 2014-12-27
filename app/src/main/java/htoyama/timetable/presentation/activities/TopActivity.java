@@ -18,6 +18,7 @@ import htoyama.timetable.domain.models.BaseInfo;
 import htoyama.timetable.domain.repository.BaseInfoDao;
 import htoyama.timetable.domain.repository.BaseInfoDaoStub;
 import htoyama.timetable.presentation.adapters.BaseInfoAdapter;
+import htoyama.timetable.presentation.views.StateFrameLayout;
 
 
 public class TopActivity extends BaseActivity {

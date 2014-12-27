@@ -9,15 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.squareup.otto.Bus;
-
 import htoyama.timetable.R;
 import htoyama.timetable.domain.models.BaseInfo;
-import htoyama.timetable.domain.models.Time;
 import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.domain.repository.TimetableDao;
 import htoyama.timetable.domain.repository.TimetableDaoStub;
 import htoyama.timetable.presentation.views.DividerItemDecoration;
+
+import static htoyama.timetable.domain.models.Time.DayType;
 
 /**
  * Created by toyamaosamuyu on 2014/12/26.
@@ -41,7 +40,7 @@ public class TimetablePagerAdapter extends PagerAdapter{
 
     @Override
     public int getCount() {
-        return Time.DayType.values().length;
+        return DayType.values().length;
     }
 
     @Override
@@ -51,7 +50,7 @@ public class TimetablePagerAdapter extends PagerAdapter{
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return Time.DayType.values()[position].name;
+        return DayType.values()[position].name;
     }
 
     @Override
@@ -64,11 +63,10 @@ public class TimetablePagerAdapter extends PagerAdapter{
 
         mTimetableRecyclerView = (RecyclerView) view.findViewById(R.id.pager_item_timetable_list);
 
-        Time.DayType dayType = Time.DayType.values()[position];
+        DayType dayType = DayType.values()[position];
         TimetableDao timetableDao = new TimetableDaoStub();
         Timetable timetable = timetableDao.findBy(mBaseInfo.id, dayType);
         setupTimetable(context, timetable);
-        Log.i("HOGE", "instaniateItem() [position: " + position + "]");
 
         return view;
     }

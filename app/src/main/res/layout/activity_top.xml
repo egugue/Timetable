@@ -14,6 +14,23 @@
         android:orientation="vertical">
     </android.support.v7.widget.Toolbar>
 
+    <htoyama.timetable.presentation.views.StateFrameLayout
+        android:id="@+id/state_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tool_bar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/top_timetable_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </htoyama.timetable.presentation.views.StateFrameLayout>
+    <!--
     <android.support.v7.widget.RecyclerView
         android:id="@+id/top_timetable_list"
         android:layout_width="match_parent"
@@ -22,5 +39,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         />
+        -->
 
 </RelativeLayout>
