@@ -8,13 +8,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.squareup.otto.Bus;
 
 import htoyama.timetable.R;
+import htoyama.timetable.domain.models.BaseInfo;
+import htoyama.timetable.domain.models.Time;
 import htoyama.timetable.domain.models.Timetable;
+import htoyama.timetable.domain.repository.TimetableDao;
+import htoyama.timetable.domain.repository.TimetableDaoStub;
 import htoyama.timetable.presentation.views.DividerItemDecoration;
 
 /**
@@ -27,18 +29,19 @@ public class TimetablePagerAdapter extends PagerAdapter{
     private TimetableAdapter mTimetableAdapter;
     private OnStateChangeListener mStateChangeListener;
     private DividerItemDecoration mDividerItemDecoration;
+    private BaseInfo mBaseInfo;
 
     public static interface OnStateChangeListener {
         public void onScrolledTimetable(RecyclerView recyclerView, int dx, int dy);
     }
 
-    public void setOnStateChangeLister(OnStateChangeListener lister) {
-        mStateChangeListener = lister;
+    public TimetablePagerAdapter(BaseInfo baseInfo) {
+        mBaseInfo = baseInfo;
     }
 
     @Override
     public int getCount() {
-        return Timetable.DayType.values().length;
+        return Time.DayType.values().length;
     }
 
     @Override
@@ -48,24 +51,24 @@ public class TimetablePagerAdapter extends PagerAdapter{
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return Timetable.DayType.values()[position].name;
+        return Time.DayType.values()[position].name;
     }
 
-    /**
-     * Instantiate the {@link View} which should be displayed at {@code position}. Here we
-     * inflate a layout from the apps resources and then change the text view to signify the position.
-     */
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         final Context context = container.getContext();
 
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.pager_item_timetable, container, false);
-
         container.addView(view);
 
         mTimetableRecyclerView = (RecyclerView) view.findViewById(R.id.pager_item_timetable_list);
-        setupTimetable(context);
+
+        Time.DayType dayType = Time.DayType.values()[position];
+        TimetableDao timetableDao = new TimetableDaoStub();
+        Timetable timetable = timetableDao.findBy(mBaseInfo.id, dayType);
+        setupTimetable(context, timetable);
+        Log.i("HOGE", "instaniateItem() [position: " + position + "]");
 
         return view;
     }
@@ -76,11 +79,16 @@ public class TimetablePagerAdapter extends PagerAdapter{
         Log.i("HOGE", "destroyItem() [position: " + position + "]");
     }
 
-    private void setupTimetable(final Context context) {
+    public void setOnStateChangeLister(OnStateChangeListener lister) {
+        mStateChangeListener = lister;
+    }
+
+    private void setupTimetable(final Context context, Timetable timetable) {
         if (mDividerItemDecoration == null) {
             mDividerItemDecoration = new DividerItemDecoration(context);
         }
-        mTimetableAdapter = new TimetableAdapter(context, getListStub());
+
+        mTimetableAdapter = new TimetableAdapter(context, timetable);
 
         mTimetableRecyclerView.setHasFixedSize(true);
         mTimetableRecyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -96,15 +104,6 @@ public class TimetablePagerAdapter extends PagerAdapter{
                 }
             }
         });
-    }
-
-    private List<Timetable> getListStub() {
-        List<Timetable> timetableList = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            Timetable item = new Timetable(i, 1, null, null, null, null);
-            timetableList.add(item);
-        }
-        return timetableList;
     }
 
 }

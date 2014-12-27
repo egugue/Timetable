@@ -2,11 +2,9 @@ package htoyama.timetable.presentation.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -15,7 +13,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import htoyama.timetable.R;
-import htoyama.timetable.domain.models.Timetable;
+import htoyama.timetable.domain.models.Time;
 
 /**
  * Created by toyamaosamuyu on 2014/12/26.
@@ -24,14 +22,14 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
     private static final String TAG = TimetableAdapter.class.getSimpleName();
 
     private Context mContext;
-    private List<Timetable> mList;
+    private List<Time> mList;
 
     public TimetableAdapter(Context context) {
         mContext = context;
-        mList = new ArrayList<Timetable>();
+        mList = new ArrayList<Time>();
     }
 
-    public TimetableAdapter(Context context, List<Timetable> list) {
+    public TimetableAdapter(Context context, List<Time> list) {
         mContext =context;
         mList = list;
     }
@@ -69,8 +67,10 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
             ButterKnife.inject(this, itemView);
         }
 
-        public void bind(Timetable item) {
+        public void bind(Time item) {
             mDepartureTimeTextView.setText(item.id+":00");
+            mDestinationTextView.setText(item.dayType.name);
+
         }
     }
 

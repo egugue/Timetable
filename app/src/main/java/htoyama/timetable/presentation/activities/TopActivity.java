@@ -14,6 +14,9 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import htoyama.timetable.R;
+import htoyama.timetable.domain.models.BaseInfo;
+import htoyama.timetable.domain.repository.BaseInfoDao;
+import htoyama.timetable.domain.repository.BaseInfoDaoStub;
 import htoyama.timetable.presentation.adapters.BaseInfoAdapter;
 
 
@@ -34,27 +37,18 @@ public class TopActivity extends BaseActivity {
     }
 
     private void setupRecyclerView() {
-        mBaseInfoAdapter = new BaseInfoAdapter(this, getListStub());
+        BaseInfoDao baseInfoDao = new BaseInfoDaoStub();
+        mBaseInfoAdapter = new BaseInfoAdapter(this, baseInfoDao.findAll(), mOnItemClickListener);
 
         mTimetableRecyclerView.setHasFixedSize(true);
         mTimetableRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mTimetableRecyclerView.setAdapter(mBaseInfoAdapter);
         mTimetableRecyclerView.setAnimation(null);
-        getToolbar().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), TimetableActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
-    private List<Integer> getListStub() {
-        List<Integer> list = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            list.add(i);
-        }
-        return list;
+    private void openTimetableActivity(BaseInfo baseInfo) {
+        Intent intent = TimetableActivity.createIntent(getApplicationContext(), baseInfo);
+        startActivity(intent);
     }
 
     @Override
@@ -73,4 +67,12 @@ public class TopActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private BaseInfoAdapter.OnItemClickListener mOnItemClickListener
+            = new BaseInfoAdapter.OnItemClickListener() {
+        @Override
+        public void onCardClick(BaseInfo baseInfo) {
+            openTimetableActivity(baseInfo);
+        }
+    };
 }

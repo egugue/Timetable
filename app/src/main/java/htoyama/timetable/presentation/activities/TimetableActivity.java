@@ -1,13 +1,17 @@
 package htoyama.timetable.presentation.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,15 +19,17 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import htoyama.timetable.R;
-import htoyama.timetable.domain.models.Timetable;
+import htoyama.timetable.domain.models.BaseInfo;
+import htoyama.timetable.domain.models.Time;
 import htoyama.timetable.presentation.adapters.TimetablePagerAdapter;
-import htoyama.timetable.presentation.adapters.TimetableAdapter;
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
 
 public class TimetableActivity extends BaseActivity
         implements MaterialTabListener, TimetablePagerAdapter.OnStateChangeListener {
+
+    private static final String EXSTRA_KEY_BASE_INFO = "BASE_INFO";
 
     private MaterialTabHost mTabHost;
     private ViewPager mViewPager;
@@ -35,9 +41,14 @@ public class TimetableActivity extends BaseActivity
     @InjectView(R.id.timetable_header)
     View mHeaderView;
 
+    public static Intent createIntent(Context context, BaseInfo baseInfo) {
+        Intent intent = new Intent(context, TimetableActivity.class);
+        intent.putExtra(EXSTRA_KEY_BASE_INFO, baseInfo);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //TODO : Toolbarに影をつける https://speakerdeck.com/cockscomb/android-5-dot-0-lollipop-toribiada-quan
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timetable);
         ButterKnife.inject(this);
@@ -96,8 +107,8 @@ public class TimetableActivity extends BaseActivity
     }
 
     private void setupTab() {
-
-        final TimetablePagerAdapter pagerAdapter = new TimetablePagerAdapter();
+        final BaseInfo baseInfo = getBaseInfoFromExtras();
+        final TimetablePagerAdapter pagerAdapter = new TimetablePagerAdapter(baseInfo);
         pagerAdapter.setOnStateChangeLister(this);
 
         mTabHost = (MaterialTabHost) this.findViewById(R.id.tabHost);
@@ -123,13 +134,12 @@ public class TimetableActivity extends BaseActivity
 
     }
 
-    private List<Timetable> getListStub() {
-        List<Timetable> timetableList = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            Timetable item = new Timetable(i, 1, null, null, null, null);
-            timetableList.add(item);
+    private BaseInfo getBaseInfoFromExtras() {
+        Bundle extaras = getIntent().getExtras();
+        if (extaras == null) {
+            return null;
         }
-        return timetableList;
+        return (BaseInfo) extaras.get(EXSTRA_KEY_BASE_INFO);
     }
 
     @Override
