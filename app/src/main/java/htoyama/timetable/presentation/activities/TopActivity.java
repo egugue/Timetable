@@ -15,9 +15,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import htoyama.timetable.R;
 import htoyama.timetable.domain.models.BaseInfo;
+import htoyama.timetable.domain.models.Time;
 import htoyama.timetable.domain.repository.BaseInfoDao;
 import htoyama.timetable.domain.repository.BaseInfoDaoStub;
 import htoyama.timetable.presentation.adapters.BaseInfoAdapter;
+import htoyama.timetable.presentation.views.DividerItemDecoration;
+import htoyama.timetable.presentation.views.PaddingItemDecoration;
 import htoyama.timetable.presentation.views.StateFrameLayout;
 
 
@@ -39,12 +42,17 @@ public class TopActivity extends BaseActivity {
 
     private void setupRecyclerView() {
         BaseInfoDao baseInfoDao = new BaseInfoDaoStub();
+
         mBaseInfoAdapter = new BaseInfoAdapter(this, baseInfoDao.findAll(), mOnItemClickListener);
 
         mTimetableRecyclerView.setHasFixedSize(true);
         mTimetableRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mTimetableRecyclerView.setAdapter(mBaseInfoAdapter);
         mTimetableRecyclerView.setAnimation(null);
+        mTimetableRecyclerView.addItemDecoration(
+                new PaddingItemDecoration(
+                        getResources().getDimensionPixelSize(R.dimen.spacing_medium))
+        );
     }
 
     private void openTimetableActivity(BaseInfo baseInfo) {

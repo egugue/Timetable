@@ -27,7 +27,6 @@ public class WorkerThreadExecutor implements Executor{
         return sInstance;
     }
 
-
     @Override
     public void execute(Runnable command) {
         mHandler.post(command);

@@ -10,11 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
- * Created by toyamaosamuyu on 2014/12/27.
+ * {@link RecyclerView}で表示された各アイテム間に
+ * 境界線をもたせるデコレーション
  */
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
-    private static final String TAG = DividerItemDecoration.class.getSimpleName();
-
 
     private static final int[] ATTRS = new int[]{
             android.R.attr.listDivider
@@ -29,7 +28,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     @Override
-    public void onDraw(Canvas c, RecyclerView parent) {
+    public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         drawVertical(c, parent);
     }
 
@@ -56,7 +55,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     @Override
-    public void getItemOffsets(Rect outRect, int itemPosition, RecyclerView parent) {
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
     }
 

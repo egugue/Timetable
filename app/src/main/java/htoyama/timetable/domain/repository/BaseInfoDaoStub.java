@@ -19,7 +19,7 @@ public class BaseInfoDaoStub implements BaseInfoDao{
     @Override
     public List<BaseInfo> findAll() {
         List<BaseInfo> list = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 10; i++) {
             list.add(findById(i));
         }
         return list;

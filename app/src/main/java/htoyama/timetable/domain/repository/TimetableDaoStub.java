@@ -1,7 +1,12 @@
 package htoyama.timetable.domain.repository;
 
+import java.util.Date;
+
 import htoyama.timetable.domain.models.Time;
 import htoyama.timetable.domain.models.Timetable;
+
+import static htoyama.timetable.domain.models.Time.DayType;
+import static htoyama.timetable.domain.models.Time.TrainType;
 
 /**
  * Created by toyamaosamuyu on 2014/12/27.
@@ -39,7 +44,7 @@ public class TimetableDaoStub implements TimetableDao{
         }
 
         for(int i = 0; i < 30; i++) {
-            Time time = new Time(i, baseId, dayType, null, null, null);
+            Time time = new Time(i, baseId, dayType, TrainType.EXPRESS, new Date(), "新宿行き");
             timetable.add(time);
         }
 
