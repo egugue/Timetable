@@ -1,6 +1,7 @@
 package htoyama.timetable.presentation.views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +19,15 @@ import htoyama.timetable.domain.models.Timetable;
  */
 public class TimetableLayout extends LinearLayout {
 
+    private static final int DEFAULT_MAX_ITEMS = 5;
+    private int mMaxItems;
+
     public TimetableLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOrientation(LinearLayout.VERTICAL);
+
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.TimetableLayout);
+        mMaxItems = typedArray.getInt(R.styleable.TimetableLayout_maxItems, DEFAULT_MAX_ITEMS);
     }
 
     /**
@@ -28,6 +35,8 @@ public class TimetableLayout extends LinearLayout {
      * @param timetable タイムテーブル情報。格納されているタイム文だけ表示する。
      */
     public void setTimetable(Timetable timetable) {
+        removeAllViews();
+
         View row;
         TextView depatureTimeTextView;
         TextView trainTypeTextView;
@@ -35,6 +44,9 @@ public class TimetableLayout extends LinearLayout {
         final SimpleDateFormat sdf = new SimpleDateFormat("mm':'yy");
 
         for (Time time : timetable) {
+
+            if (isOverMaxItems()) break;
+
             row = LayoutInflater.from(getContext()).inflate(R.layout.list_item_timetable_small, null);
 
             depatureTimeTextView = (TextView) row.findViewById(R.id.list_item_timetable_depature_time);
@@ -48,6 +60,18 @@ public class TimetableLayout extends LinearLayout {
             addView(row);
         }
 
+    }
+
+    /**
+     * 表示する最大アイテム数を設定する。
+     * @param maxItems 表示したい最大アイテム数
+     */
+    public void setMaxItems(int maxItems) {
+        mMaxItems = maxItems;
+    }
+
+    private boolean isOverMaxItems() {
+        return getChildCount() >= mMaxItems;
     }
 
 }

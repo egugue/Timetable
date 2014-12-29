@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+    <!--
 <set xmlns:android="http://schemas.android.com/apk/res/android"
     android:ordering="sequentially">
 
@@ -30,27 +31,24 @@
             />
     </set>
 
-
-
 </set>
+    -->
 
-<!--
 <set xmlns:android="http://schemas.android.com/apk/res/android">
 
     <objectAnimator
         android:propertyName="alpha"
-        android:duration="700"
+        android:duration="750"
         android:valueFrom="0.0"
         android:valueTo="1.0"
     />
 
     <objectAnimator
-        android:propertyName="translationY"
-        android:duration="700"
-        android:valueFrom="600"
+        android:propertyName="translationX"
+        android:duration="500"
+        android:valueFrom="-600"
         android:valueTo="0"
         android:interpolator="@android:interpolator/accelerate_decelerate"
         />
 
 </set>
--->

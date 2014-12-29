@@ -13,7 +13,19 @@ public class BaseInfoDaoStub implements BaseInfoDao{
 
     @Override
     public BaseInfo findById(int id) {
-        return new BaseInfo(id, "池袋", "山手線", "新宿・渋谷方面");
+        return new BaseInfo(id, "池袋", "山手線", "新宿・渋谷方面", BaseInfo.Type.GO_TO_WORK);
+    }
+
+    @Override
+    public List<BaseInfo> findBy(BaseInfo.Type type) {
+        List<BaseInfo> list = new ArrayList<>();
+
+        BaseInfo baseInfo = new BaseInfo(1, "池袋", "山手線", "新宿・渋谷方面", type);
+        for (int i = 0; i < 10; i++) {
+            list.add(baseInfo);
+        }
+
+        return  list;
     }
 
     @Override

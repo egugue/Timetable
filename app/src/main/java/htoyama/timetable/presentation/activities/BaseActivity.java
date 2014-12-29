@@ -11,28 +11,21 @@ import htoyama.timetable.R;
 public class BaseActivity extends ActionBarActivity{
     private Toolbar mToolbar;
 
-    /*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getToolbar();
-    }
-    */
-
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
-        getToolbar();
+        setupToolbar();
     }
 
     protected Toolbar getToolbar() {
-        if (mToolbar != null) return mToolbar;
+        return mToolbar;
+    }
 
+    private void setupToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
         }
-        return mToolbar;
     }
 
 }

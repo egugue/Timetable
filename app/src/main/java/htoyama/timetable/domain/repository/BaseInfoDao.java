@@ -16,6 +16,8 @@ public interface BaseInfoDao {
      */
     public BaseInfo findById(int id);
 
+    public List<BaseInfo> findBy(BaseInfo.Type type);
+
     /**
      * 登録されている基本情報をすべて取得する
      * @return
