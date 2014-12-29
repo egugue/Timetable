@@ -9,10 +9,10 @@ import java.util.concurrent.Executor;
  * Created by toyamaosamuyu on 2014/12/28.
  */
 public class WorkerThreadExecutor implements Executor{
-    private static final String TAG = WorkerThreadExecutor.class.getSimpleName();
-    private final HandlerThread mHandlerThread;
     private static WorkerThreadExecutor sInstance;
+
     private final Handler mHandler;
+    private final HandlerThread mHandlerThread;
 
     private WorkerThreadExecutor() {
         mHandlerThread = new HandlerThread("WORKER");
@@ -21,12 +21,17 @@ public class WorkerThreadExecutor implements Executor{
     }
 
     public static WorkerThreadExecutor getInstance() {
-        if (sInstance == null) {
-            sInstance = new WorkerThreadExecutor();
+        if (sInstance != null) {
+            return sInstance;
+        }
+
+        synchronized (WorkerThreadExecutor.class) {
+            if (sInstance == null) {
+                sInstance = new WorkerThreadExecutor();
+            }
         }
         return sInstance;
     }
-
 
     @Override
     public void execute(Runnable command) {

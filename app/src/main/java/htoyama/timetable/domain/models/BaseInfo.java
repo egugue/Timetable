@@ -12,12 +12,21 @@ public class BaseInfo implements Parcelable{
     public String station;
     public String train;
     public String boundForName;
+    public Type type;
 
-    public BaseInfo(int id, String station, String train, String boundForName) {
+    // TODO : 名前
+    public static enum Type {
+        GO_TO_WORK,
+        LEAVING_WORK,
+        NONE
+    }
+
+    public BaseInfo(int id, String station, String train, String boundForName, Type type) {
         this.id = id;
         this.station = station;
         this.train = train;
         this.boundForName = boundForName;
+        this.type = type;
     }
 
     private BaseInfo(Parcel source) {

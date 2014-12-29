@@ -4,6 +4,7 @@ import android.util.Log;
 
 import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.presentation.views.StateFrameLayout;
+import htoyama.timetable.tools.MainThreadExecutor;
 import htoyama.timetable.tools.WorkerThreadExecutor;
 
 import static htoyama.timetable.domain.models.Time.DayType;
@@ -26,8 +27,20 @@ public class TimeableLoader {
             @Override
             public void run() {
                 TimetableDao timetableDao = new TimetableDaoStub();
-                Timetable timetable = timetableDao.findBy(baseId, dayType);
-                listener.onLoadTimetableComplete(timetable);
+                final Timetable timetable = timetableDao.findBy(baseId, dayType);
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                MainThreadExecutor.getInstance().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        listener.onLoadTimetableComplete(timetable);
+                    }
+                });
             }
         };
 
