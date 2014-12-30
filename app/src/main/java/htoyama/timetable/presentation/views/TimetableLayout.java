@@ -19,15 +19,15 @@ import htoyama.timetable.domain.models.Timetable;
  */
 public class TimetableLayout extends LinearLayout {
 
-    private static final int DEFAULT_MAX_ITEMS = 5;
     private int mMaxItems;
 
     public TimetableLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOrientation(LinearLayout.VERTICAL);
 
+        final int defaultMaxItems = getResources().getInteger(R.integer.timetable_layout_default_max_items);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.TimetableLayout);
-        mMaxItems = typedArray.getInt(R.styleable.TimetableLayout_maxItems, DEFAULT_MAX_ITEMS);
+        mMaxItems = typedArray.getInt(R.styleable.TimetableLayout_maxItems, defaultMaxItems);
     }
 
     /**
@@ -68,6 +68,14 @@ public class TimetableLayout extends LinearLayout {
      */
     public void setMaxItems(int maxItems) {
         mMaxItems = maxItems;
+    }
+
+    /**
+     * 現在設定されている、表示する最大アイテム数を取得する
+     * @return 現在設定されている、表示する最大アイテム数
+     */
+    public int getMaxItems() {
+        return mMaxItems;
     }
 
     private boolean isOverMaxItems() {
