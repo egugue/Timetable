@@ -86,7 +86,7 @@ public class TimetablePagerAdapter extends PagerAdapter{
             mDividerItemDecoration = new DividerItemDecoration(context);
         }
 
-        mTimetableAdapter = new TimetableAdapter(context, timetable);
+        mTimetableAdapter = new TimetableAdapter(timetable);
 
         mTimetableRecyclerView.setHasFixedSize(true);
         mTimetableRecyclerView.setLayoutManager(new LinearLayoutManager(context));

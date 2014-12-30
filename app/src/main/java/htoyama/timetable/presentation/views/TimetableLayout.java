@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import htoyama.timetable.R;
 import htoyama.timetable.domain.models.Time;
@@ -41,7 +42,7 @@ public class TimetableLayout extends LinearLayout {
         TextView depatureTimeTextView;
         TextView trainTypeTextView;
         TextView destinationTextView;
-        final SimpleDateFormat sdf = new SimpleDateFormat("mm':'yy");
+        final SimpleDateFormat sdf = new SimpleDateFormat("hh':'mm");
 
         for (Time time : timetable) {
 

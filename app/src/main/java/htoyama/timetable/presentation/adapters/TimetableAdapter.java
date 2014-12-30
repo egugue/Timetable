@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,16 +22,13 @@ import htoyama.timetable.domain.models.Time;
 public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.ViewHolder>{
     private static final String TAG = TimetableAdapter.class.getSimpleName();
 
-    private Context mContext;
     private List<Time> mList;
 
-    public TimetableAdapter(Context context) {
-        mContext = context;
-        mList = new ArrayList<Time>();
+    public TimetableAdapter() {
+        mList = new ArrayList<>();
     }
 
-    public TimetableAdapter(Context context, List<Time> list) {
-        mContext =context;
+    public TimetableAdapter(List<Time> list) {
         mList = list;
     }
 
@@ -54,6 +52,7 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private static final SimpleDateFormat SDF = new SimpleDateFormat("hh':'mm");
 
         @InjectView(R.id.list_item_timetable_depature_time)
         TextView mDepartureTimeTextView;
@@ -68,9 +67,8 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
         }
 
         public void bind(Time item) {
-            mDepartureTimeTextView.setText(item.id+":00");
-            mDestinationTextView.setText(item.dayType.name);
-
+            mDepartureTimeTextView.setText(SDF.format(item.depatureTime));
+            mDestinationTextView.setText("池袋・新宿方面");
         }
     }
 
