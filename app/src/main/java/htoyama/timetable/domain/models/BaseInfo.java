@@ -68,13 +68,19 @@ public class BaseInfo implements Parcelable{
 
     @Override
     public String toString() {
+        String partStr = "null";
+        if (partType != null)  partStr = partType.toString();
+
+        String dayStr = "null";
+        if (dayType != null) dayStr = dayType.toString();
+
         return "BaseInfo[ "
                 + "id= " + id
                 + ",  station= " + station
                 + ",  train = " + train
                 + ",  boundForName = " + boundForName
-                + ",  partType = " + partType.toString() //FIXME : nullのとき
-                + ",  dayType = " + dayType.toString() //FIXME : nullのとき
+                + ",  partType = " + partStr
+                + ",  dayType = " + dayStr
                 + ",  modified = " +  modified
                 + " ]";
     }
