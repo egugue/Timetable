@@ -9,14 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import htoyama.timetable.R;
 import htoyama.timetable.domain.models.BaseInfo;
+import htoyama.timetable.domain.models.DayType;
 import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.domain.repository.TimetableDao;
-import htoyama.timetable.domain.repository.TimetableDaoStub;
+import htoyama.timetable.domain.repository.sqlite.TimetableSqliteDao;
 import htoyama.timetable.presentation.views.DividerItemDecoration;
 
-import static htoyama.timetable.domain.models.Time.DayType;
 
 /**
  * Created by toyamaosamuyu on 2014/12/26.
@@ -29,6 +32,7 @@ public class TimetablePagerAdapter extends PagerAdapter{
     private OnStateChangeListener mStateChangeListener;
     private DividerItemDecoration mDividerItemDecoration;
     private BaseInfo mBaseInfo;
+    private String mCurrentHhMm= new SimpleDateFormat("hh:mm").format(new Date());
 
     public static interface OnStateChangeListener {
         public void onScrolledTimetable(RecyclerView recyclerView, int dx, int dy);
@@ -50,7 +54,8 @@ public class TimetablePagerAdapter extends PagerAdapter{
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return DayType.values()[position].name;
+        int id = position + 1;
+        return DayType.valueOf(id).name;
     }
 
     @Override
@@ -64,9 +69,15 @@ public class TimetablePagerAdapter extends PagerAdapter{
         mTimetableRecyclerView = (RecyclerView) view.findViewById(R.id.pager_item_timetable_list);
 
         DayType dayType = DayType.values()[position];
-        TimetableDao timetableDao = new TimetableDaoStub();
-        Timetable timetable = timetableDao.findBy(mBaseInfo.id, dayType);
+
+        //TimetableDao timetableDao = new TimetableDaoStub();
+        TimetableDao timetableDao = new TimetableSqliteDao(view.getContext());
+
+        Timetable timetable = timetableDao.findBy(mBaseInfo.id);
         setupTimetable(context, timetable);
+
+        int closePosition = mTimetableAdapter.getClosePosition(mCurrentHhMm);
+        mTimetableRecyclerView.scrollToPosition(closePosition);
 
         return view;
     }
@@ -102,6 +113,7 @@ public class TimetablePagerAdapter extends PagerAdapter{
                 }
             }
         });
+
     }
 
 }

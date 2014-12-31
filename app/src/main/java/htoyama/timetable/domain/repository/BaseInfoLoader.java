@@ -1,11 +1,9 @@
 package htoyama.timetable.domain.repository;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import java.util.List;
 
 import htoyama.timetable.domain.models.BaseInfo;
+import htoyama.timetable.domain.repository.stub.BaseInfoDaoStub;
 import htoyama.timetable.tools.MainThreadExecutor;
 import htoyama.timetable.tools.WorkerThreadExecutor;
 

@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 public class BaseInfoAdapterTest {
 
 
+    /*
     public static class 初期状態が空だった場合 {
         private BaseInfoAdapter sut;
 
@@ -53,5 +54,6 @@ public class BaseInfoAdapterTest {
         }
 
     }
+    */
 
 }

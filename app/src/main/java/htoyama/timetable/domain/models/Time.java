@@ -1,6 +1,8 @@
 package htoyama.timetable.domain.models;
 
 
+import android.database.Cursor;
+
 import java.util.Date;
 
 
@@ -8,49 +10,37 @@ import java.util.Date;
  * Created by toyamaosamuyu on 2014/12/26.
  */
 public class Time {
-    private static final String TAG = Time.class.getSimpleName();
-
-    public int id;
-    public int baseInfoId;
-    public DayType dayType;
-    public Date depatureTime;
+    public int baseInfoId = -1;
     public TrainType trainType;
+    public String depatureTime;
     public String destination;
 
-    public Time(int id, int baseInfoId, DayType dayType,
-                TrainType trainType, Date depatureTime, String destination) {
-        this.id = id;
+    public Time(int baseInfoId, TrainType trainType, String depatureTime, String destination) {
         this.baseInfoId = baseInfoId;
-        this.dayType = dayType;
         this.trainType = trainType;
         this.depatureTime = depatureTime;
         this.destination = destination;
     }
 
-    public static enum DayType {
-        WEEKDAY("平日"),
-        SATURDAY("土曜"),
-        HOLIDAY("休日");
 
-        public final String name;
-
-        private DayType(String name) {
-            this.name = name;
-        }
-
+    @Override
+    public String toString() {
+        return "Time["
+                + "baseInfoId = " + baseInfoId
+                + ",  trainType = " + trainType.toString()
+                + ",  depatureTime = " + depatureTime
+                + ",  destination = " + destination
+                + "]";
     }
 
-    public static enum TrainType {
-        RAPID("快速"), //快速
-        SEMI_RAPID("準急"), //準急
-        EXPRESS("急行"), //急行
-        LOCAL("各駅"); //各駅
+    public static Time createWith(Cursor cursor) {
+        int baseInfoId = cursor.getInt(0);
+        int trainTypeId = cursor.getInt(1);
+        String depatureTime = cursor.getString(2);
+        String destination = cursor.getString(3);
 
-        public final String name;
-
-        private TrainType(String name) {
-            this.name = name;
-        }
+        return new Time(baseInfoId, TrainType.valueOf(trainTypeId),
+                depatureTime, destination);
     }
 
 }

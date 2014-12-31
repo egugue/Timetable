@@ -1,12 +1,17 @@
 package htoyama.timetable.domain.repository;
 
+import android.content.Context;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import htoyama.timetable.domain.models.BaseInfo;
-import htoyama.timetable.domain.models.Time;
 import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.domain.models.TopItem;
+import htoyama.timetable.domain.repository.sqlite.BaseInfoSqliteDao;
+import htoyama.timetable.domain.repository.sqlite.TimetableSqliteDao;
 import htoyama.timetable.events.BusHolder;
 import htoyama.timetable.events.LoadTopItemListCompleteEvent;
 import htoyama.timetable.tools.MainThreadExecutor;
@@ -16,6 +21,12 @@ import htoyama.timetable.tools.WorkerThreadExecutor;
  * Created by toyamaosamuyu on 2014/12/30.
  */
 public class TopItemLoader {
+    private final SimpleDateFormat mSdf = new SimpleDateFormat("hh:mm");
+    private Context mContext;
+
+    public TopItemLoader(final Context context) {
+        mContext = context;
+    }
 
     public void loadTopItemList() {
 
@@ -45,16 +56,20 @@ public class TopItemLoader {
     }
 
     private List<TopItem> getTopItemList() {
+        //BaseInfoDao baseInfoDao  = new BaseInfoDaoStub();
+        //TimetableDao timetableDao = new TimetableDaoStub();
 
-        BaseInfo.Type type = BaseInfo.Type.GO_TO_WORK;
-        BaseInfoDao baseInfoDao  = new BaseInfoDaoStub();
-        List<BaseInfo> baseInfoList = baseInfoDao.findBy(type);
-
-        TimetableDao timetableDao = new TimetableDaoStub();
-
+        BaseInfoDao baseInfoDao = new BaseInfoSqliteDao(mContext);
+        TimetableDao timetableDao = new TimetableSqliteDao(mContext);
+        final String currentHhMm = mSdf.format(new Date());
         List<TopItem> topItemList = new ArrayList<>();
+
+        List<BaseInfo> baseInfoList = baseInfoDao.findAll();
         for (BaseInfo baseInfo : baseInfoList) {
-            Timetable timetable = timetableDao.findBy(1, Time.DayType.HOLIDAY);
+            Timetable timetable = timetableDao
+                    .setLimit(3)
+                    .findBy(baseInfo.id, currentHhMm);
+
             topItemList.add(new TopItem(baseInfo, timetable));
         }
 

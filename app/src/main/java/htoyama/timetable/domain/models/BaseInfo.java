@@ -1,32 +1,82 @@
 package htoyama.timetable.domain.models;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by toyamaosamuyu on 2014/12/26.
  */
 public class BaseInfo implements Parcelable{
+    private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd kk-mm-ss");
 
-    public int id;
+    public int id = -1;
     public String station;
     public String train;
     public String boundForName;
-    public Type type;
+    public DayType dayType;
+    public PartType partType;
+    public Date modified;
 
-    // TODO : 名前
-    public static enum Type {
-        GO_TO_WORK,
-        LEAVING_WORK,
-        NONE
+    public BaseInfo(String station, String train, String boundForName,
+                    DayType dayType, PartType partType) {
+
+        this.station = station;
+        this.train = train;
+        this.boundForName = boundForName;
+        this.dayType = dayType;
+        this.partType = partType;
     }
 
-    public BaseInfo(int id, String station, String train, String boundForName, Type type) {
+    public BaseInfo(int id, String station, String train, String boundForName,
+                    DayType dayType, PartType partType, Date modified) {
+
         this.id = id;
         this.station = station;
         this.train = train;
         this.boundForName = boundForName;
-        this.type = type;
+        this.partType = partType;
+        this.dayType = dayType;
+        this.modified = modified;
+    }
+
+    public static BaseInfo createWith(Cursor cursor) {
+        int dayTypeId = cursor.getInt(4);
+        int partTypeId = cursor.getInt(5);
+
+        Date date = null;
+        try {
+            date = SDF.parse(cursor.getString(6));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return new BaseInfo(
+            cursor.getInt(0),
+            cursor.getString(1),
+            cursor.getString(2),
+            cursor.getString(3),
+            DayType.valueOf(dayTypeId),
+            PartType.valueOf(partTypeId),
+            date
+        );
+    }
+
+    @Override
+    public String toString() {
+        return "BaseInfo[ "
+                + "id= " + id
+                + ",  station= " + station
+                + ",  train = " + train
+                + ",  boundForName = " + boundForName
+                + ",  partType = " + partType.toString() //FIXME : nullのとき
+                + ",  dayType = " + dayType.toString() //FIXME : nullのとき
+                + ",  modified = " +  modified
+                + " ]";
     }
 
     private BaseInfo(Parcel source) {

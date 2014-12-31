@@ -1,13 +1,11 @@
 package htoyama.timetable.presentation.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,9 +48,26 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
         return mList.size();
     }
 
+    /**
+     * 引数に渡した出発時刻に一番近いアイテムのポジションを取得する。
+     * @param depatureTime
+     * @return
+     */
+    public int getClosePosition(String depatureTime) {
+        final int size = getItemCount();
+        Time time;
+        for (int i = 0; i < size; i++) {
+            time = mList.get(i);
+            if (time.depatureTime.compareTo(depatureTime) > 0) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private static final SimpleDateFormat SDF = new SimpleDateFormat("hh':'mm");
 
         @InjectView(R.id.list_item_timetable_depature_time)
         TextView mDepartureTimeTextView;
@@ -67,8 +82,9 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
         }
 
         public void bind(Time item) {
-            mDepartureTimeTextView.setText(SDF.format(item.depatureTime));
-            mDestinationTextView.setText("池袋・新宿方面");
+            mDepartureTimeTextView.setText(item.depatureTime);
+            mTrainTypeTextView.setText(item.trainType.name);
+            mDestinationTextView.setText(item.destination);
         }
     }
 
