@@ -17,11 +17,12 @@ import java.util.List;
 
 import htoyama.timetable.R;
 import htoyama.timetable.domain.models.BaseInfo;
+import htoyama.timetable.domain.models.DayType;
 import htoyama.timetable.domain.models.Time;
 import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.domain.repository.TimeableLoader;
 import htoyama.timetable.domain.repository.TimetableDao;
-import htoyama.timetable.domain.repository.TimetableDaoStub;
+import htoyama.timetable.domain.repository.stub.TimetableDaoStub;
 import htoyama.timetable.presentation.views.TimetableLayout;
 
 
@@ -129,8 +130,9 @@ public class BaseInfoAdapter extends RecyclerView.Adapter<BaseInfoAdapter.ViewHo
 
         private void setTimetableLayout() {
 
+            /*
             TimeableLoader loader = new TimeableLoader();
-            loader.loadTimeline(1, Time.DayType.HOLIDAY, new TimeableLoader.OnLoadTimetableCompleteListener() {
+            loader.loadTimeline(1, DayType.HOLIDAY, new TimeableLoader.OnLoadTimetableCompleteListener() {
                 @Override
                 public void onLoadTimetableComplete(Timetable timetable) {
 
@@ -141,6 +143,7 @@ public class BaseInfoAdapter extends RecyclerView.Adapter<BaseInfoAdapter.ViewHo
                     mTimetableLayout.setTimetable(mini);
                 }
             });
+            */
 
         }
 

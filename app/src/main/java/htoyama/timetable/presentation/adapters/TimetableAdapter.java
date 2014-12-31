@@ -1,6 +1,5 @@
 package htoyama.timetable.presentation.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,16 +20,13 @@ import htoyama.timetable.domain.models.Time;
 public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.ViewHolder>{
     private static final String TAG = TimetableAdapter.class.getSimpleName();
 
-    private Context mContext;
     private List<Time> mList;
 
-    public TimetableAdapter(Context context) {
-        mContext = context;
-        mList = new ArrayList<Time>();
+    public TimetableAdapter() {
+        mList = new ArrayList<>();
     }
 
-    public TimetableAdapter(Context context, List<Time> list) {
-        mContext =context;
+    public TimetableAdapter(List<Time> list) {
         mList = list;
     }
 
@@ -52,6 +48,24 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
         return mList.size();
     }
 
+    /**
+     * 引数に渡した出発時刻に一番近いアイテムのポジションを取得する。
+     * @param depatureTime
+     * @return
+     */
+    public int getClosePosition(String depatureTime) {
+        final int size = getItemCount();
+        Time time;
+        for (int i = 0; i < size; i++) {
+            time = mList.get(i);
+            if (time.depatureTime.compareTo(depatureTime) > 0) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -68,9 +82,9 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
         }
 
         public void bind(Time item) {
-            mDepartureTimeTextView.setText(item.id+":00");
-            mDestinationTextView.setText(item.dayType.name);
-
+            mDepartureTimeTextView.setText(item.depatureTime);
+            mTrainTypeTextView.setText(item.trainType.name);
+            mDestinationTextView.setText(item.destination);
         }
     }
 

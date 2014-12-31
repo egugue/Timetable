@@ -15,5 +15,9 @@
     <dimen name="card_content_text_size_smalll">14sp</dimen>
     <dimen name="card_headline_text_size_middle">24sp</dimen>
 
+    <!-- タイムテーブル -->
+    <dimen name="timetable_depature_time_text_size">40sp</dimen>
+    <dimen name="timetable_train_type_text_size">16sp</dimen>
+    <dimen name="timetable_destination_text_size">16sp</dimen>
 
 </resources>

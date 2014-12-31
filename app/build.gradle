@@ -39,7 +39,6 @@ dependencies {
     compile 'com.squareup:otto:1.3.5'
     compile 'com.android.support:recyclerview-v7:21.0.2'
     compile 'it.neokree:MaterialTabs:0.10'
-
     androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
 }
