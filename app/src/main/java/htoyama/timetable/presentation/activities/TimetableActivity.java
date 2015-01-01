@@ -76,12 +76,48 @@ public class TimetableActivity extends BaseActivity
     }
 
 
+    private int sumY = 0;
+
     @Override
     public void onScrolledTimetable(RecyclerView recyclerView, int dx, int dy) {
-        if (dy < 0) {
+        if (dy == 0) {
             return;
         }
 
+        /*
+        //下方向にスクロール
+        if (dy > 0) {
+
+            //まだタブ以下だったら
+            if (sumY <= firstY) {
+                sumY += dy;
+                if (sumY > firstY) sumY = firstY;
+
+                mHeaderView.setTranslationY(-sumY);
+                //recyclerView.setTranslationY(-sumY);
+                mViewPager.setTranslationY(-sumY);
+            }
+
+            return;
+        }
+
+        //以下は、上方向にスクロール
+
+        //まだツールバー全体が見えていないなら
+        if (sumY > 0) {
+            sumY += dy;
+
+            //もと画面以上の値になったら修正
+            if (sumY < 0) sumY = 0;
+
+            mHeaderView.setTranslationY(-sumY);
+            //recyclerView.setTranslationY(sumY);
+        }
+        */
+
+        //recyclerView.setTranslationY(dy);
+
+        /*
         if (!isHideBar) {
             isHideBar = true;
             int height = getToolbar().getHeight();
@@ -92,6 +128,7 @@ public class TimetableActivity extends BaseActivity
             mlp.topMargin -= height;
             mViewPager.setLayoutParams(mlp);
         }
+        */
     }
 
     private void recomputeMetrics() {
@@ -172,12 +209,16 @@ public class TimetableActivity extends BaseActivity
         return super.onOptionsItemSelected(item);
     }
 
+    private int firstY = -1;
+
     private ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener
             = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {
             recomputeMetrics();
             mWrapingFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+            firstY = mHeaderView.getHeight() - mTabHost.getHeight();
         }
     };
 
