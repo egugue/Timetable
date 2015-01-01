@@ -116,9 +116,6 @@ public class TopActivity extends BaseActivity {
     }
 
     private void refresh() {
-        Animator animator = AnimatorInflater.loadAnimator(this, R.animator.card_slide_out);
-        animator.setTarget(mTimetableCardListView);
-        animator.start();
         loadListItem();
     }
 

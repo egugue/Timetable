@@ -41,12 +41,37 @@ public class InputActivity extends BaseActivity {
     @OnClick(R.id.add_roppongi)
     public void onClickAddRoppongi() {
         BaseInfo baseInfo = new BaseInfo("六本木", "大江戸線", "新宿・光が丘方面", DayType.WEEKDAY, PartType.LEAVING_WORK);
+        String fileName = "roppongi.txt";
+        registerData(baseInfo, fileName);
+
+    }
+
+    @OnClick(R.id.add_koma)
+    public void onClickKoma() {
+        BaseInfo baseInfo = new BaseInfo("駒込", "山手線", "池袋・新宿方面", DayType.WEEKDAY, PartType.GO_TO_WORK);
+        String fileName = "komagome.txt";
+        registerData(baseInfo, fileName);
+    }
+
+    @OnClick(R.id.all_delete_button)
+    public void onClickAllDelete() {
+        BaseInfoDao dao = new BaseInfoSqliteDao(this);
+        dao.clear();
+
+
+        TimetableDao tDao = new TimetableSqliteDao(this);
+        tDao.clear();
+
+    }
+
+    private void registerData(BaseInfo baseInfo, String textName) {
+
         registerBaseInfo(baseInfo);
 
         BaseInfoDao dao = new BaseInfoSqliteDao(this);
         int baseId = dao.getLatestId();
 
-        String files = new AssetDao(this).loadAssetFile("roppongi.txt");
+        String files = new AssetDao(this).loadAssetFile(textName);
         String[] lines = separeteFile(files);
         Timetable timetable = createTimetable(baseId, lines);
         registerTimetable(timetable);
@@ -67,13 +92,11 @@ public class InputActivity extends BaseActivity {
 
     private void registerTimetable(Timetable timetable) {
         TimetableDao dao = new TimetableSqliteDao(this);
-        dao.clear();
         dao.addAll(timetable);
     }
 
     private void registerBaseInfo(final BaseInfo baseInfo) {
         BaseInfoDao dao = new BaseInfoSqliteDao(this);
-        dao.clear();
         dao.add(baseInfo);
     }
 

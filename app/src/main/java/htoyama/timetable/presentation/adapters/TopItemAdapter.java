@@ -87,7 +87,8 @@ public class TopItemAdapter extends RecyclerView.Adapter<TopItemAdapter.ViewHold
 
         private CardView mCardView;
         private ImageView mThumbnailImageView;
-        private TextView mDestTextView;
+        private TextView mStationTextView;
+        private TextView mBoundForNameTextView;
         private TimetableLayout mTimetableLayout;
         private Context mContext;
 
@@ -97,11 +98,20 @@ public class TopItemAdapter extends RecyclerView.Adapter<TopItemAdapter.ViewHold
 
             mCardView = (CardView) itemView.findViewById(R.id.card_view);
             mThumbnailImageView = (ImageView) itemView.findViewById(R.id.list_item_card_big_thumbnail);
-            //mDestTextView = (TextView) itemView.findViewById(R.id.list_item_card_big_dest_text);
+            mStationTextView = (TextView) itemView.findViewById(R.id.list_item_card_station);
+            mBoundForNameTextView = (TextView) itemView.findViewById(R.id.list_item_card_bound_for_name);
             mTimetableLayout = (TimetableLayout) itemView.findViewById(R.id.list_item_card_timetable_layout);
         }
 
         public void bind(final TopItem item) {
+
+            mStationTextView.setText(item.baseInfo.station);
+            mBoundForNameTextView.setText(item.baseInfo.boundForName);
+            mTimetableLayout.setTimetable(item.timetable);
+
+            Picasso.with(mContext)
+                    .load(R.drawable.shibuya_02)
+                    .into(mThumbnailImageView);
 
             mCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -109,12 +119,6 @@ public class TopItemAdapter extends RecyclerView.Adapter<TopItemAdapter.ViewHold
                     BusHolder.getBus().post(new ClickTopItemEvent(item));
                 }
             });
-
-            mTimetableLayout.setTimetable(item.timetable);
-
-            Picasso.with(mContext)
-                    .load(R.drawable.shibuya_02)
-                    .into(mThumbnailImageView);
 
             //まだ見たことがないアイテムなら
             if (sShowedPosition < getPosition() ) {

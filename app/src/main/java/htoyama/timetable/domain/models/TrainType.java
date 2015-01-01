@@ -4,7 +4,7 @@ package htoyama.timetable.domain.models;
  * Created by toyamaosamuyu on 2014/12/31.
  */
 public enum TrainType {
-    LOCAL(1,"各駅"),
+    LOCAL(1,"普通"),
     EXPRESS(2, "急行"),
     RAPID(3, "快速"),
     SEMI_RAPID(4, "準急");

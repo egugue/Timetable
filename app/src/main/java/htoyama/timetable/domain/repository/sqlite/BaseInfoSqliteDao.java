@@ -108,22 +108,19 @@ public class BaseInfoSqliteDao implements BaseInfoDao{
 
     @Override
     public void add(BaseInfo baseInfo) {
-        BaseInfo baseInfo1 = new BaseInfo("新宿", "京浜東北線", "池袋・新宿方面",
-                DayType.WEEKDAY, PartType.GO_TO_WORK);
-
         SQLiteDatabase db = mHelper.getWritableDatabase();
 
-        if (baseInfo1.modified == null) {
-            baseInfo1.modified = new Date();
+        if (baseInfo.modified == null) {
+            baseInfo.modified = new Date();
         }
-        String modified = mSdfF.format(baseInfo1.modified);
+        String modified = mSdfF.format(baseInfo.modified);
 
         ContentValues values = new ContentValues();
-        values.put(COL_BASE_INFOS_STATION, baseInfo1.station);
-        values.put(COL_BASE_INFOS_TRAIN, baseInfo1.train);
-        values.put(COL_BASE_INFOS_BOUND_FOR_NAME, baseInfo1.boundForName);
-        values.put(COL_BASE_INFOS_DAY_TYPE, baseInfo1.dayType.id);
-        values.put(COL_BASE_INFOS_PART_TYPE, baseInfo1.partType.id);
+        values.put(COL_BASE_INFOS_STATION, baseInfo.station);
+        values.put(COL_BASE_INFOS_TRAIN, baseInfo.train);
+        values.put(COL_BASE_INFOS_BOUND_FOR_NAME, baseInfo.boundForName);
+        values.put(COL_BASE_INFOS_DAY_TYPE, baseInfo.dayType.id);
+        values.put(COL_BASE_INFOS_PART_TYPE, baseInfo.partType.id);
         values.put(COL_BASE_INFOS_MODIFIED, modified);
 
         db.insert(TABLE_BASE_INFOS, null, values);

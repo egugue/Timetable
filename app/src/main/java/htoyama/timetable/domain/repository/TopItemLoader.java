@@ -1,6 +1,7 @@
 package htoyama.timetable.domain.repository;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,7 +66,11 @@ public class TopItemLoader {
         List<TopItem> topItemList = new ArrayList<>();
 
         List<BaseInfo> baseInfoList = baseInfoDao.findAll();
+        Log.d("HOGE", baseInfoList.size()+"");
+
+
         for (BaseInfo baseInfo : baseInfoList) {
+            Log.d("HOGE", baseInfo.toString());
             Timetable timetable = timetableDao
                     .setLimit(3)
                     .findBy(baseInfo.id, currentHhMm);
