@@ -25,10 +25,7 @@ import butterknife.InjectView;
 import htoyama.timetable.R;
 import htoyama.timetable.domain.models.BaseInfo;
 import htoyama.timetable.domain.models.TopItem;
-import htoyama.timetable.domain.repository.BaseInfoDao;
-import htoyama.timetable.domain.repository.TimetableParser;
 import htoyama.timetable.domain.repository.TopItemLoader;
-import htoyama.timetable.domain.repository.sqlite.BaseInfoSqliteDao;
 import htoyama.timetable.events.BusHolder;
 import htoyama.timetable.events.ClickTopItemEvent;
 import htoyama.timetable.events.LoadTopItemListCompleteEvent;
@@ -65,11 +62,6 @@ public class TopActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-
-        /*
-        BaseInfoDao dao = new BaseInfoSqliteDao(this);
-        Log.d("HOGE", dao.getLatestId()+"");
-        */
 
     }
 
@@ -155,40 +147,6 @@ public class TopActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private String loadFile() {
-        String fileName = "roppongi.txt";
-
-        StringBuilder file = new StringBuilder();
-
-        final AssetManager assetManager = getAssets();
-        try {
-            InputStream is = assetManager.open(fileName);
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
-            String line;
-            String sep = System.getProperty("line.separator");
-            while ((line = br.readLine()) != null) {
-                file.append(line).append(sep);
-
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return file.toString();
-    }
-
-    private String separete(String str) {
-        final String sep = System.getProperty("line.separator");
-        String[] lines = str.split(sep);
-        for (String line : lines) {
-            Log.d("HOGE", line);
-        }
-
-        return null;
     }
 
 }
