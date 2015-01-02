@@ -2,6 +2,7 @@
 <resources>
 
     <color name="text_primary">@color/white</color>
+    <color name="text_secondary">#727272</color>
     <color name="theme_primary">@color/teal_500</color>
     <color name="theme_primary_dark">@color/teal_700</color>
     <color name="theme_accent">@color/deep_orange_a200</color>

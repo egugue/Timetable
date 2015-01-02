@@ -1,5 +1,8 @@
 package htoyama.timetable.domain.models;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by toyamaosamuyu on 2014/12/31.
  */
@@ -24,4 +27,20 @@ public enum DayType {
         }
         return null;
     }
+
+    public static DayType valueOf(Date date) {
+        Calendar now = Calendar.getInstance();
+        now.setTime(date);
+
+        switch (now.get(Calendar.DAY_OF_WEEK)) {
+            case Calendar.SATURDAY:
+                return SATURDAY;
+            case Calendar.MONDAY:
+                return HOLIDAY;
+            default:
+                return WEEKDAY;
+        }
+
+    }
+
 }

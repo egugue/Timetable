@@ -47,8 +47,6 @@ public class BaseInfoSqliteDao implements BaseInfoDao{
                 + " WHERE"
                 + " " + COL_BASE_INFOS_ID + " = " + id;
 
-        Log.d("HOGE", query);
-
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
         BaseInfo baseInfo = BaseInfo.createWith(cursor);
@@ -60,7 +58,20 @@ public class BaseInfoSqliteDao implements BaseInfoDao{
 
     @Override
     public List<BaseInfo> findBy(PartType partType) {
-        return null;
+        SQLiteDatabase db = mHelper.getReadableDatabase();
+
+        String query =
+                "SELECT * FROM " + TABLE_BASE_INFOS
+                        + " WHERE"
+                        + " " + COL_BASE_INFOS_PART_TYPE + " = " + partType.id;
+
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        List<BaseInfo> baseInfoList = createBaeInfoList(cursor);
+        cursor.close();
+        db.close();
+
+        return baseInfoList;
     }
 
     @Override
@@ -87,16 +98,22 @@ public class BaseInfoSqliteDao implements BaseInfoDao{
         SQLiteDatabase db = mHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM "+TABLE_BASE_INFOS, null);
 
-        List<BaseInfo> baseInfoList = new ArrayList<>();
         cursor.moveToFirst();
+        List<BaseInfo> baseInfoList = createBaeInfoList(cursor);
+        cursor.close();
+        db.close();
+
+        return baseInfoList;
+    }
+
+    private List<BaseInfo> createBaeInfoList(Cursor cursor) {
+        List<BaseInfo> baseInfoList = new ArrayList<>();
 
         final int size = cursor.getCount();
         for (int i = 0; i < size; i++) {
             baseInfoList.add(BaseInfo.createWith(cursor));
             cursor.moveToNext();
         }
-        cursor.close();
-        db.close();
 
         return baseInfoList;
     }

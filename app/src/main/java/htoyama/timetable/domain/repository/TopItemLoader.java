@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import htoyama.timetable.domain.models.BaseInfo;
+import htoyama.timetable.domain.models.PartType;
 import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.domain.models.TopItem;
 import htoyama.timetable.domain.repository.sqlite.BaseInfoSqliteDao;
@@ -65,12 +66,10 @@ public class TopItemLoader {
         final String currentHhMm = mSdf.format(new Date());
         List<TopItem> topItemList = new ArrayList<>();
 
-        List<BaseInfo> baseInfoList = baseInfoDao.findAll();
-        Log.d("HOGE", baseInfoList.size()+"");
-
+        PartType partType = PartType.valueOf(new Date(), mContext);
+        List<BaseInfo> baseInfoList = baseInfoDao.findBy(partType);
 
         for (BaseInfo baseInfo : baseInfoList) {
-            Log.d("HOGE", baseInfo.toString());
             Timetable timetable = timetableDao
                     .setLimit(3)
                     .findBy(baseInfo.id, currentHhMm);

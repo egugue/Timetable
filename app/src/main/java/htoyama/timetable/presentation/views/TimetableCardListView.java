@@ -9,6 +9,7 @@ import android.util.Log;
 import java.util.List;
 
 import htoyama.timetable.R;
+import htoyama.timetable.domain.models.PartType;
 import htoyama.timetable.domain.models.TopItem;
 import htoyama.timetable.presentation.adapters.TopItemAdapter;
 
@@ -32,7 +33,7 @@ public class TimetableCardListView extends RecyclerView{
     }
 
     private void initialize() {
-        mAdapter = new TopItemAdapter(getContext());
+        mAdapter = new TopItemAdapter();
 
         setHasFixedSize(true);
         setLayoutManager(new LinearLayoutManager(getContext()));

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="timetable_layout_default_max_items">3</integer>
+
+    <integer name="default_to_leaving_work_time">15</integer>
 </resources>

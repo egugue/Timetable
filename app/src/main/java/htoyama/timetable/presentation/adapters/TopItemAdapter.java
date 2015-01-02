@@ -14,9 +14,12 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import htoyama.timetable.R;
+import htoyama.timetable.domain.models.DayType;
+import htoyama.timetable.domain.models.PartType;
 import htoyama.timetable.domain.models.TopItem;
 import htoyama.timetable.events.BusHolder;
 import htoyama.timetable.events.ClickTopItemEvent;
@@ -26,19 +29,19 @@ import htoyama.timetable.presentation.views.TimetableLayout;
 /**
  * Created by toyamaosamuyu on 2014/12/30.
  */
-public class TopItemAdapter extends RecyclerView.Adapter<TopItemAdapter.ViewHolder>{
+public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private static final String TAG = BaseInfoAdapter.class.getSimpleName();
+    private static final int VIEW_TYPE_HEADER = 0;
+    private static final int VIEW_TYPE_ITEM = 1;
 
-    private Context mContext;
     private List<TopItem> mList;
 
-    public TopItemAdapter(Context context) {
-        this(context, new ArrayList<TopItem>());
+    public TopItemAdapter() {
+        this(new ArrayList<TopItem>());
     }
 
-    public TopItemAdapter(Context context, List<TopItem> list) {
-        mContext = context;
+    public TopItemAdapter(List<TopItem> list) {
         mList = list;
     }
 
@@ -63,25 +66,68 @@ public class TopItemAdapter extends RecyclerView.Adapter<TopItemAdapter.ViewHold
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater. from(parent.getContext())
-                .inflate(R.layout.list_item_card_big, parent, false);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_HEADER) {
+            return HeaderViewHolder.create(parent);
+        }
 
-        return new ViewHolder(view, view.getContext());
+        return ItemViewHolder.create(parent);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        TopItem item = mList.get(position);
-        holder.bind(item);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        switch (getItemViewType(position)) {
+            case VIEW_TYPE_HEADER:
+                ((HeaderViewHolder) holder).bind();
+                break;
+
+            default:
+                position--; //minus header
+                ((ItemViewHolder) holder).bind( mList.get(position) );
+                break;
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return mList.size();
+        return mList.size() + 1; // plus header
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) return VIEW_TYPE_HEADER;
+        return VIEW_TYPE_ITEM;
+    }
+
+    public static class HeaderViewHolder extends RecyclerView.ViewHolder {
+        private TextView mHeaderTextView;
+
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
+            mHeaderTextView = (TextView) itemView.findViewById(R.id.list_item_header_text);
+        }
+
+        public static HeaderViewHolder create(ViewGroup parent) {
+            View view = LayoutInflater
+                    .from(parent.getContext()).inflate(R.layout.list_item_top_header, parent, false);
+
+            return new HeaderViewHolder(view);
+        }
+
+        public void bind() {
+            Date now = new Date();
+            String dayTypeName = DayType.valueOf(now).name;
+            String partTypeName = PartType.valueOf(now, mHeaderTextView.getContext()).name;
+
+            mHeaderTextView.setText(
+                    dayTypeName+"の"+partTypeName
+            );
+        }
+
+    }
+
+    public static class ItemViewHolder extends RecyclerView.ViewHolder {
         //すでに画面に表示したアイテムの位置
         private static int sShowedPosition = -1;
 
@@ -90,11 +136,9 @@ public class TopItemAdapter extends RecyclerView.Adapter<TopItemAdapter.ViewHold
         private TextView mStationTextView;
         private TextView mBoundForNameTextView;
         private TimetableLayout mTimetableLayout;
-        private Context mContext;
 
-        public ViewHolder(final View itemView, Context context) {
+        public ItemViewHolder(final View itemView) {
             super(itemView);
-            mContext = context;
 
             mCardView = (CardView) itemView.findViewById(R.id.card_view);
             mThumbnailImageView = (ImageView) itemView.findViewById(R.id.list_item_card_big_thumbnail);
@@ -103,13 +147,20 @@ public class TopItemAdapter extends RecyclerView.Adapter<TopItemAdapter.ViewHold
             mTimetableLayout = (TimetableLayout) itemView.findViewById(R.id.list_item_card_timetable_layout);
         }
 
+        public static ItemViewHolder create(ViewGroup parent) {
+            View view = LayoutInflater. from(parent.getContext())
+                    .inflate(R.layout.list_item_card_big, parent, false);
+
+            return new ItemViewHolder(view);
+        }
+
         public void bind(final TopItem item) {
 
             mStationTextView.setText(item.baseInfo.station);
             mBoundForNameTextView.setText(item.baseInfo.boundForName);
             mTimetableLayout.setTimetable(item.timetable);
 
-            Picasso.with(mContext)
+            Picasso.with(mThumbnailImageView.getContext())
                     .load(R.drawable.shibuya_02)
                     .into(mThumbnailImageView);
 
