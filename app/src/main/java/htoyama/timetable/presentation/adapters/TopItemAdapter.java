@@ -2,7 +2,6 @@ package htoyama.timetable.presentation.adapters;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
-import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -50,11 +49,13 @@ public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         notifyDataSetChanged();
     }
 
+    //FIXME : ヘッダーを追加したことによってindexの扱いが変わった
     public void add(TopItem item, int index) {
         mList.add(index, item);
         notifyItemInserted(index);
     }
 
+    //FIXME : ヘッダーを追加したことによってindexの扱いが変わった
     public void remove(int index) {
         mList.remove(index);
         notifyItemRemoved(index);
@@ -82,7 +83,7 @@ public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 break;
 
             default:
-                position--; //minus header
+                position--; //minus for header
                 ((ItemViewHolder) holder).bind( mList.get(position) );
                 break;
         }
@@ -91,7 +92,7 @@ public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return mList.size() + 1; // plus header
+        return mList.size() + 1; //plus for header
     }
 
     @Override

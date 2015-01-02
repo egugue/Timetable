@@ -48,7 +48,7 @@ public class InputActivity extends BaseActivity {
 
     @OnClick(R.id.add_koma)
     public void onClickKoma() {
-        BaseInfo baseInfo = new BaseInfo("駒込", "山手線", "池袋・新宿方面", DayType.WEEKDAY, PartType.GO_TO_WORK);
+        BaseInfo baseInfo = new BaseInfo("駒込", "山手線", "池袋・新宿方面", DayType.WEEKDAY, PartType.GOING_TO_WORK);
         String fileName = "komagome.txt";
         registerData(baseInfo, fileName);
     }

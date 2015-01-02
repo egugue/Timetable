@@ -14,10 +14,10 @@ public class SharedPreferencesHelper {
     private SharedPreferences mSharedPreferences;
 
     public static enum Key {
-        TO_LEAVEING_WORK_TIME("to_leaving_work_time");
+        LEAVEING_WORK_TIME_THRESHOLD("leaving_work_time_threshold"),
+        GOING_TO_WORK_TIME_THRESHOLD("going_to_work_time_threshold");
 
         private String name;
-
         private Key(String name) {
             this.name = name;
         }
