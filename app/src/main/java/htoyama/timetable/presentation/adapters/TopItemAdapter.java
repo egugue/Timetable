@@ -48,9 +48,8 @@ public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         notifyDataSetChanged();
     }
 
-    //FIXME : ヘッダーを追加したことによってindexの扱いが変わった
     public void add(TopItem item, int index) {
-        mList.add(index, item);
+        mList.add(index-1, item);
         notifyItemInserted(index);
     }
 

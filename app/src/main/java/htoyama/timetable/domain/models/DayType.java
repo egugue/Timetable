@@ -7,9 +7,9 @@ import java.util.Date;
  * Created by toyamaosamuyu on 2014/12/31.
  */
 public enum DayType {
-    WEEKDAY(1, "平日"),
-    SATURDAY(2, "土曜"),
-    HOLIDAY(3, "休日");
+    WEEKDAY(0, "平日"),
+    SATURDAY(1, "土曜"),
+    HOLIDAY(2, "休日");
 
     public final int id;
     public final String name;
@@ -25,7 +25,7 @@ public enum DayType {
                 return dayType;
             }
         }
-        return null;
+        throw new IllegalArgumentException("no such enum object for the id: " + id);
     }
 
     public static DayType valueOf(Date date) {

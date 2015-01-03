@@ -4,21 +4,17 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.List;
 
 import htoyama.timetable.R;
-import htoyama.timetable.domain.models.BaseInfo;
 import htoyama.timetable.domain.models.TopItem;
 import htoyama.timetable.events.BusHolder;
 import htoyama.timetable.events.ClickTopItemEvent;
 import htoyama.timetable.presentation.adapters.TopItemAdapter;
 import htoyama.timetable.presentation.decorations.PaddingItemDecoration;
 import htoyama.timetable.presentation.listeners.RecyclerItemClickListener;
-import htoyama.timetable.presentation.listeners.SwipeDismissRecyclerViewTouchListener;
 
 /**
  * Created by toyamaosamuyu on 2014/12/30.

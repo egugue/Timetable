@@ -14,7 +14,6 @@ import htoyama.timetable.domain.models.BaseInfo;
 import htoyama.timetable.domain.models.PartType;
 import htoyama.timetable.domain.repository.BaseInfoDao;
 
-import static htoyama.timetable.domain.repository.sqlite.TimetableDbConstants.COL_BASE_INFOS_DAY_TYPE;
 import static htoyama.timetable.domain.repository.sqlite.TimetableDbConstants.COL_BASE_INFOS_MODIFIED;
 import static htoyama.timetable.domain.repository.sqlite.TimetableDbConstants.TABLE_BASE_INFOS;
 import static htoyama.timetable.domain.repository.sqlite.TimetableDbConstants.COL_BASE_INFOS_ID;
@@ -133,7 +132,6 @@ public class BaseInfoSqliteDao implements BaseInfoDao{
         values.put(COL_BASE_INFOS_STATION, baseInfo.station);
         values.put(COL_BASE_INFOS_TRAIN, baseInfo.train);
         values.put(COL_BASE_INFOS_BOUND_FOR_NAME, baseInfo.boundForName);
-        values.put(COL_BASE_INFOS_DAY_TYPE, baseInfo.dayType.id);
         values.put(COL_BASE_INFOS_PART_TYPE, baseInfo.partType.id);
         values.put(COL_BASE_INFOS_MODIFIED, modified);
 

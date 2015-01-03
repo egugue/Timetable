@@ -17,9 +17,9 @@ import static htoyama.timetable.helpers.SharedPreferencesHelper.Key;
  * を決定する
  */
 public enum PartType {
-    GOING_TO_WORK(1, "出勤時"),
-    LEAVING_WORK(2, "退勤時"),
-    NONE(3, "設定しない");
+    GOING_TO_WORK(0, "出勤時"),
+    LEAVING_WORK(1, "退勤時"),
+    NONE(2, "設定しない");
 
     public final int id;
     public final String name;
@@ -35,7 +35,7 @@ public enum PartType {
                 return partType;
             }
         }
-        return null;
+        throw new IllegalArgumentException("no such enum object for the id: " + id);
     }
 
     public static PartType valueOf(final Date date, final Context context) {

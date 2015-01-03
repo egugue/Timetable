@@ -54,8 +54,7 @@ public class TimetablePagerAdapter extends PagerAdapter{
 
     @Override
     public CharSequence getPageTitle(int position) {
-        int id = position + 1;
-        return DayType.valueOf(id).name;
+        return DayType.valueOf(position).name;
     }
 
     @Override
@@ -68,12 +67,11 @@ public class TimetablePagerAdapter extends PagerAdapter{
 
         mTimetableRecyclerView = (RecyclerView) view.findViewById(R.id.pager_item_timetable_list);
 
-        DayType dayType = DayType.values()[position];
+        DayType dayType = DayType.valueOf(position);
 
-        //TimetableDao timetableDao = new TimetableDaoStub();
         TimetableDao timetableDao = new TimetableSqliteDao(view.getContext());
 
-        Timetable timetable = timetableDao.findBy(mBaseInfo.id);
+        Timetable timetable = timetableDao.findBy(mBaseInfo.id, dayType);
         setupTimetable(context, timetable);
 
         int closePosition = mTimetableAdapter.getClosePosition(mCurrentHhMm);

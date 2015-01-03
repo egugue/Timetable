@@ -15,31 +15,9 @@ import htoyama.timetable.domain.repository.TimetableDao;
 public class TimetableDaoStub implements TimetableDao {
     private static final String TAG = TimetableDaoStub.class.getSimpleName();
 
-    /*
-    @Override
-    public Timetable findById(int id) {
-        return null;
-    }
-
-    @Override
-    public Timetable findByBaseInfoId(int id) {
-        final Timetable timetable = new Timetable();
-        if (id != 1) {
-            return timetable;
-        }
-
-        for(int i = 0; i < 30; i++) {
-            Time time = new Time(i, id, null, null, null, null);
-            timetable.add(time);
-        }
-
-        return timetable;
-    }
-    */
-
     @Override
     public TimetableDao setLimit(int limit) {
-        return null;
+        return this;
     }
 
     @Override
@@ -50,7 +28,7 @@ public class TimetableDaoStub implements TimetableDao {
         }
 
         for(int i = 0; i < 30; i++) {
-            Time time = new Time(baseId, TrainType.EXPRESS, "10:00", "新宿行き");
+            Time time = new Time(baseId, DayType.WEEKDAY, TrainType.EXPRESS, "10:00", "新宿行き");
             timetable.add(time);
         }
 
@@ -59,7 +37,12 @@ public class TimetableDaoStub implements TimetableDao {
 
     @Override
     public Timetable findBy(int baseId, String afterDepatureTIme) {
-        return null;
+        return findBy(baseId);
+    }
+
+    @Override
+    public Timetable findBy(int baseId, DayType dayType) {
+        return findBy(baseId);
     }
 
     @Override

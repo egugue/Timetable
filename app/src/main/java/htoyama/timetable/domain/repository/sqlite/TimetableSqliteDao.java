@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import htoyama.timetable.domain.models.DayType;
 import htoyama.timetable.domain.models.Time;
 import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.domain.repository.TimetableDao;
@@ -33,7 +34,22 @@ public class TimetableSqliteDao implements TimetableDao{
 
     @Override
     public Timetable findBy(int baseId) {
-        return findBy(baseId, null);
+        SQLiteDatabase db = mHelper.getReadableDatabase();
+
+        String query = getDefaultSelectQuery(baseId);
+
+        if (mLimit != -1) {
+            query += " LIMIT " + mLimit;
+        }
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        cursor.moveToFirst();
+        Timetable timetable = createTimetable(cursor);
+        cursor.close();
+        db.close();
+
+        return timetable;
     }
 
     @Override
@@ -50,10 +66,29 @@ public class TimetableSqliteDao implements TimetableDao{
                     + " " + COL_TIMETABLE_DEPATURE_TIME + " >= '"+afterDepatureTime+"'";
         }
 
-        if (mLimit != -1) {
-            query += " LIMIT " + mLimit;
-        }
-        //Log.d("HOGE", query);
+        query = attacheLimitPhraseIfNeeded(query);
+        //Log.d(TAG,, query);
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        cursor.moveToFirst();
+        Timetable timetable = createTimetable(cursor);
+        cursor.close();
+        db.close();
+
+        return timetable;
+    }
+
+    @Override
+    public Timetable findBy(int baseId, DayType dayType) {
+        SQLiteDatabase db = mHelper.getReadableDatabase();
+
+        String query = getDefaultSelectQuery(baseId);
+        query += " AND"
+                + " " + COL_TIMETABLE_DAY_TYPE + " = '"+dayType.id+"'";
+
+        query = attacheLimitPhraseIfNeeded(query);
+        //Log.d(TAG, query);
 
         Cursor cursor = db.rawQuery(query, null);
 
@@ -68,11 +103,9 @@ public class TimetableSqliteDao implements TimetableDao{
     @Override
     public Timetable findAll() {
         SQLiteDatabase db = mHelper.getReadableDatabase();
-        String query = "SELECT * FROM "+TABLE_TIMETABLE;
 
-        if (mLimit != -1) {
-            query += " LIMIT " + mLimit;
-        }
+        String query = "SELECT * FROM "+TABLE_TIMETABLE;
+        query = attacheLimitPhraseIfNeeded(query);
 
         Cursor cursor = db.rawQuery(query, null);
 
@@ -91,15 +124,16 @@ public class TimetableSqliteDao implements TimetableDao{
         db.beginTransaction();
 
         SQLiteStatement stmt = db.compileStatement(
-                "INSERT INTO "+TABLE_TIMETABLE+" VALUES(?, ?, ?, ?);");
+                "INSERT INTO "+TABLE_TIMETABLE+" VALUES(?, ?, ?, ?, ?);");
 
         for (Time time : timetable) {
             time.depatureTime = TimeUtils.convertMidnightTimeIfNeeded(time.depatureTime, false);
 
             stmt.bindLong(1, time.baseInfoId);
-            stmt.bindLong(2, time.trainType.id);
-            stmt.bindString(3, time.depatureTime);
-            stmt.bindString(4, time.destination);
+            stmt.bindLong(2, time.dayType.id);
+            stmt.bindLong(3, time.trainType.id);
+            stmt.bindString(4, time.depatureTime);
+            stmt.bindString(5, time.destination);
             stmt.execute();
         }
 
@@ -130,6 +164,20 @@ public class TimetableSqliteDao implements TimetableDao{
         Time time = Time.createWith(cursor);
         time.depatureTime = TimeUtils.convertMidnightTimeIfNeeded(time.depatureTime, true);
         return time;
+    }
+
+    private String getDefaultSelectQuery(int baseId) {
+        return "SELECT * FROM " + TABLE_TIMETABLE
+                + " WHERE"
+                + " " + COL_TIMETABLE_BASE_INFO_ID + " = " + baseId;
+
+    }
+
+    private String attacheLimitPhraseIfNeeded(String query) {
+        if (mLimit != -1) {
+            query += " LIMIT " + mLimit;
+        }
+        return query;
     }
 
 }
