@@ -11,4 +11,9 @@ public class TopItem {
         this.baseInfo = baseInfo;
         this.timetable = timetable;
     }
+
+    @Override
+    public TopItem clone() {
+        return new TopItem(baseInfo.clone(), timetable.clone());
+    }
 }

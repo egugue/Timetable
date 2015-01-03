@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,6 @@ import htoyama.timetable.R;
 import htoyama.timetable.domain.models.DayType;
 import htoyama.timetable.domain.models.PartType;
 import htoyama.timetable.domain.models.TopItem;
-import htoyama.timetable.events.BusHolder;
-import htoyama.timetable.events.ClickTopItemEvent;
 import htoyama.timetable.presentation.views.TimetableLayout;
 
 
@@ -55,9 +54,25 @@ public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         notifyItemInserted(index);
     }
 
-    //FIXME : ヘッダーを追加したことによってindexの扱いが変わった
+    /**
+     * 表示されているTopItemを取得する
+     * @param index 何番目のTopItemか　ただし0はヘッダーなので入れないこと
+     * @return
+     */
+    public TopItem getItem(int index) {
+        if (index == 0 || getItemCount() < index) {
+            return  null;
+        }
+
+        index--; //decrement for header
+        TopItem topItem = mList.get(index).clone();
+        return topItem;
+    }
+
     public void remove(int index) {
-        mList.remove(index);
+        int a = index--;
+        mList.remove(a);
+        //notifyItemChanged(index);
         notifyItemRemoved(index);
     }
 
@@ -156,7 +171,6 @@ public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         public void bind(final TopItem item) {
-
             mStationTextView.setText(item.baseInfo.station);
             mBoundForNameTextView.setText(item.baseInfo.boundForName);
             mTimetableLayout.setTimetable(item.timetable);
@@ -164,13 +178,6 @@ public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Picasso.with(mThumbnailImageView.getContext())
                     .load(R.drawable.shibuya_02)
                     .into(mThumbnailImageView);
-
-            mCardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    BusHolder.getBus().post(new ClickTopItemEvent(item));
-                }
-            });
 
             //まだ見たことがないアイテムなら
             if (sShowedPosition < getPosition() ) {

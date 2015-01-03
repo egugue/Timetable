@@ -44,6 +44,20 @@ public class BaseInfo implements Parcelable{
         this.modified = modified;
     }
 
+
+    @Override
+    public BaseInfo clone() {
+        return new BaseInfo(
+                id,
+                station,
+                train,
+                boundForName,
+                dayType,
+                partType,
+                new Date(modified.getTime())
+        );
+    }
+
     public static BaseInfo createWith(Cursor cursor) {
         int dayTypeId = cursor.getInt(4);
         int partTypeId = cursor.getInt(5);

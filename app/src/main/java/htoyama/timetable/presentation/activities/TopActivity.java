@@ -1,23 +1,15 @@
 package htoyama.timetable.presentation.activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.squareup.otto.Subscribe;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -62,6 +54,27 @@ public class TopActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+
+
+        /*
+        SwipeDismissRecyclerViewTouchListener listener = new SwipeDismissRecyclerViewTouchListener(mTimetableCardListView,
+                new SwipeDismissRecyclerViewTouchListener.DismissCallbacks() {
+                    @Override
+                    public boolean canDismiss(int position) {
+                        return true;
+                    }
+
+                    @Override
+                    public void onDismiss(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                        for (int position : reverseSortedPositions) {
+                            //mTimetableCardListView.remove(position);
+                        }
+                    }
+                });
+
+        mTimetableCardListView.setOnTouchListener(listener);
+        mTimetableCardListView.setOnScrollListener(listener.makeScrollListener());
+        */
 
     }
 

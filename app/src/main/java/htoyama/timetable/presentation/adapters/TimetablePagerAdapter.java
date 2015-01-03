@@ -18,7 +18,7 @@ import htoyama.timetable.domain.models.DayType;
 import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.domain.repository.TimetableDao;
 import htoyama.timetable.domain.repository.sqlite.TimetableSqliteDao;
-import htoyama.timetable.presentation.views.DividerItemDecoration;
+import htoyama.timetable.presentation.decorations.DividerItemDecoration;
 
 
 /**

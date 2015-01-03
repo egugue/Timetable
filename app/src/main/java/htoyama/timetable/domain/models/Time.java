@@ -43,4 +43,10 @@ public class Time {
                 depatureTime, destination);
     }
 
+    @Override
+    public Time clone() {
+        return new Time(baseInfoId, trainType, depatureTime, destination);
+
+    }
+
 }
