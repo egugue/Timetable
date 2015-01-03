@@ -29,7 +29,7 @@ import htoyama.timetable.presentation.views.TimetableLayout;
  */
 public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private static final String TAG = BaseInfoAdapter.class.getSimpleName();
+    private static final String TAG = TopItemAdapter.class.getSimpleName();
     private static final int VIEW_TYPE_HEADER = 0;
     private static final int VIEW_TYPE_ITEM = 1;
 
