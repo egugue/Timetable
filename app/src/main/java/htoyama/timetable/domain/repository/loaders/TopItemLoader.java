@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ import htoyama.timetable.tools.WorkerThreadExecutor;
  * Created by toyamaosamuyu on 2014/12/30.
  */
 public class TopItemLoader {
-    private final SimpleDateFormat mSdf = new SimpleDateFormat("hh:mm");
+    private final SimpleDateFormat mSdf = new SimpleDateFormat("kk:mm");
     private Context mContext;
 
     public TopItemLoader(final Context context) {
@@ -60,11 +61,9 @@ public class TopItemLoader {
     }
 
     private List<TopItem> getTopItemList() {
-        //BaseInfoDao baseInfoDao  = new BaseInfoDaoStub();
-        //TimetableDao timetableDao = new TimetableDaoStub();
-
         BaseInfoDao baseInfoDao = new BaseInfoSqliteDao(mContext);
         TimetableDao timetableDao = new TimetableSqliteDao(mContext);
+
         final String currentHhMm = mSdf.format(new Date());
         List<TopItem> topItemList = new ArrayList<>();
 
@@ -72,9 +71,7 @@ public class TopItemLoader {
         List<BaseInfo> baseInfoList = baseInfoDao.findBy(partType);
 
         for (BaseInfo baseInfo : baseInfoList) {
-            Timetable timetable = timetableDao
-                    .setLimit(3)
-                    .findBy(baseInfo.id, currentHhMm);
+            Timetable timetable = timetableDao.findBy(baseInfo.id, currentHhMm);
 
             topItemList.add(new TopItem(baseInfo, timetable));
         }
