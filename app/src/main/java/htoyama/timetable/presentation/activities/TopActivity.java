@@ -55,28 +55,6 @@ public class TopActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-
-
-        /*
-        SwipeDismissRecyclerViewTouchListener listener = new SwipeDismissRecyclerViewTouchListener(mTimetableCardListView,
-                new SwipeDismissRecyclerViewTouchListener.DismissCallbacks() {
-                    @Override
-                    public boolean canDismiss(int position) {
-                        return true;
-                    }
-
-                    @Override
-                    public void onDismiss(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                        for (int position : reverseSortedPositions) {
-                            //mTimetableCardListView.remove(position);
-                        }
-                    }
-                });
-
-        mTimetableCardListView.setOnTouchListener(listener);
-        mTimetableCardListView.setOnScrollListener(listener.makeScrollListener());
-        */
-
     }
 
     @Override
