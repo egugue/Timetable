@@ -14,14 +14,26 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="roppongi"
-        android:id="@+id/add_roppongi"/>
+        android:text="koma"
+        android:id="@+id/add_koma"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="koma"
-        android:id="@+id/add_koma"/>
+        android:text="yo_oo"
+        android:id="@+id/add_yo_oo"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ro"
+        android:id="@+id/add_ro"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="yo_ya"
+        android:id="@+id/add_yo_ya"/>
 
     <Button
         style="?android:attr/buttonStyleSmall"
