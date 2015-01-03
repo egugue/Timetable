@@ -12,12 +12,11 @@ public class WorkerThreadExecutor implements Executor{
     private static WorkerThreadExecutor sInstance;
 
     private final Handler mHandler;
-    private final HandlerThread mHandlerThread;
 
     private WorkerThreadExecutor() {
-        mHandlerThread = new HandlerThread("WORKER");
-        mHandlerThread.start();
-        mHandler = new Handler(mHandlerThread.getLooper());
+        HandlerThread handlerThread = new HandlerThread("WORKER");
+        handlerThread.start();
+        mHandler = new Handler(handlerThread.getLooper());
     }
 
     public static WorkerThreadExecutor getInstance() {

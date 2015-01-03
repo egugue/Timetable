@@ -81,7 +81,7 @@ public class BaseInfoSqliteDao implements BaseInfoDao{
         Cursor cursor = db.rawQuery(query, null);
 
         int lastId = 0; //デフォルト
-        if (cursor.moveToNext() != false) {
+        if (cursor.moveToNext()) {
             lastId = cursor.getInt(0);
         }
 

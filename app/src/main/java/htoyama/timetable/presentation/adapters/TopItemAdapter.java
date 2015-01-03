@@ -65,8 +65,7 @@ public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         index--; //decrement for header
-        TopItem topItem = mList.get(index).clone();
-        return topItem;
+        return mList.get(index).clone();
     }
 
     public void remove(int index) {

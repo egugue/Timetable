@@ -24,7 +24,7 @@ public class SharedPreferencesHelper {
     }
 
     public SharedPreferencesHelper(final Context context) {
-        mSharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, context.MODE_PRIVATE);
+        mSharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
     }
 
     public int getInt(Key key, int defalut) {
