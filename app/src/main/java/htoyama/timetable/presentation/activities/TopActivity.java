@@ -17,7 +17,7 @@ import butterknife.InjectView;
 import htoyama.timetable.R;
 import htoyama.timetable.domain.models.BaseInfo;
 import htoyama.timetable.domain.models.TopItem;
-import htoyama.timetable.domain.repository.TopItemLoader;
+import htoyama.timetable.domain.repository.loaders.TopItemLoader;
 import htoyama.timetable.events.BusHolder;
 import htoyama.timetable.events.ClickTopItemEvent;
 import htoyama.timetable.events.LoadTopItemListCompleteEvent;
