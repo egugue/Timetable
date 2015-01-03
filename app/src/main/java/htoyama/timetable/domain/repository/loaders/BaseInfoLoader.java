@@ -1,4 +1,4 @@
-package htoyama.timetable.domain.repository;
+package htoyama.timetable.domain.repository.loaders;
 
 import java.util.List;
 

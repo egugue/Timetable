@@ -1,4 +1,4 @@
-package htoyama.timetable.domain.repository;
+package htoyama.timetable.domain.repository.loaders;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,6 +12,8 @@ import htoyama.timetable.domain.models.BaseInfo;
 import htoyama.timetable.domain.models.PartType;
 import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.domain.models.TopItem;
+import htoyama.timetable.domain.repository.BaseInfoDao;
+import htoyama.timetable.domain.repository.TimetableDao;
 import htoyama.timetable.domain.repository.sqlite.BaseInfoSqliteDao;
 import htoyama.timetable.domain.repository.sqlite.TimetableSqliteDao;
 import htoyama.timetable.events.BusHolder;
