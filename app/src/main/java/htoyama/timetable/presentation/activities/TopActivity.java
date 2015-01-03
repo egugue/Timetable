@@ -19,6 +19,7 @@ import htoyama.timetable.domain.models.BaseInfo;
 import htoyama.timetable.domain.models.TopItem;
 import htoyama.timetable.domain.repository.loaders.TopItemLoader;
 import htoyama.timetable.events.BusHolder;
+import htoyama.timetable.events.ChangeTimetableDataCompleteEvent;
 import htoyama.timetable.events.ClickTopItemEvent;
 import htoyama.timetable.events.LoadTopItemListCompleteEvent;
 import htoyama.timetable.presentation.views.StateFrameLayout;
@@ -101,6 +102,11 @@ public class TopActivity extends BaseActivity {
         mStateFrameLayout.showContent();
         mTimetableCardListView.setupList(list);
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Subscribe
+    public void onChangeTimetableDataComplete(ChangeTimetableDataCompleteEvent event) {
+        loadListItem();
     }
 
     private void setupSwipeRefreshLayout() {

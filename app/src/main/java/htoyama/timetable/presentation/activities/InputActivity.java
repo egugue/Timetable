@@ -21,6 +21,7 @@ import htoyama.timetable.domain.repository.TimetableDao;
 import htoyama.timetable.domain.repository.sqlite.BaseInfoSqliteDao;
 import htoyama.timetable.domain.repository.sqlite.TimetableSqliteDao;
 import htoyama.timetable.events.BusHolder;
+import htoyama.timetable.events.ChangeTimetableDataCompleteEvent;
 import htoyama.timetable.tools.AssetDao;
 
 public class InputActivity extends BaseActivity {
@@ -43,7 +44,7 @@ public class InputActivity extends BaseActivity {
         BaseInfo baseInfo = new BaseInfo("六本木", "大江戸線", "新宿・光が丘方面", DayType.WEEKDAY, PartType.LEAVING_WORK);
         String fileName = "roppongi.txt";
         registerData(baseInfo, fileName);
-
+        postChangingTimetableInfoEvent();
     }
 
     @OnClick(R.id.add_koma)
@@ -51,6 +52,7 @@ public class InputActivity extends BaseActivity {
         BaseInfo baseInfo = new BaseInfo("駒込", "山手線", "池袋・新宿方面", DayType.WEEKDAY, PartType.GOING_TO_WORK);
         String fileName = "komagome.txt";
         registerData(baseInfo, fileName);
+        postChangingTimetableInfoEvent();
     }
 
     @OnClick(R.id.all_delete_button)
@@ -58,10 +60,13 @@ public class InputActivity extends BaseActivity {
         BaseInfoDao dao = new BaseInfoSqliteDao(this);
         dao.clear();
 
-
         TimetableDao tDao = new TimetableSqliteDao(this);
         tDao.clear();
+        postChangingTimetableInfoEvent();
+    }
 
+    private void postChangingTimetableInfoEvent() {
+        BusHolder.getBus().post(new ChangeTimetableDataCompleteEvent());
     }
 
     private void registerData(BaseInfo baseInfo, String textName) {
