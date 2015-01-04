@@ -1,5 +1,8 @@
 package htoyama.timetable.utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by toyamaosamuyu on 2015/01/01.
  */
@@ -20,6 +23,10 @@ public class TimeUtils {
         }
 
         return hour+":"+minute;
+    }
+
+    public static String stringizeDepatureTime(Date date) {
+        return  new SimpleDateFormat("kk:mm").format(date);
     }
 
 }

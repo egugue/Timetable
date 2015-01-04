@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +12,7 @@ import java.util.List;
 import htoyama.timetable.domain.models.BaseInfo;
 import htoyama.timetable.domain.models.PartType;
 import htoyama.timetable.domain.repository.BaseInfoDao;
+import htoyama.timetable.utils.BaseInfoUtils;
 
 import static htoyama.timetable.domain.repository.sqlite.TimetableDbConstants.COL_BASE_INFOS_MODIFIED;
 import static htoyama.timetable.domain.repository.sqlite.TimetableDbConstants.TABLE_BASE_INFOS;
@@ -27,7 +27,6 @@ import static htoyama.timetable.domain.repository.sqlite.TimetableDbConstants.CO
  */
 public class BaseInfoSqliteDao implements BaseInfoDao{
     private static final String TAG = BaseInfoSqliteDao.class.getSimpleName();
-    private final SimpleDateFormat mSdf = new SimpleDateFormat("yyyy-MM-dd kk-mm-ss");
     private TimetableDbHelper mHelper;
 
     public BaseInfoSqliteDao(final Context context) {
@@ -126,7 +125,7 @@ public class BaseInfoSqliteDao implements BaseInfoDao{
         if (baseInfo.modified == null) {
             baseInfo.modified = new Date();
         }
-        String modified = mSdf.format(baseInfo.modified);
+        String modified = BaseInfoUtils.stringizeModified(baseInfo.modified);
 
         ContentValues values = new ContentValues();
         values.put(COL_BASE_INFOS_STATION, baseInfo.station);

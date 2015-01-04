@@ -19,12 +19,12 @@ import htoyama.timetable.events.BusHolder;
 import htoyama.timetable.events.LoadTopItemListCompleteEvent;
 import htoyama.timetable.tools.MainThreadExecutor;
 import htoyama.timetable.tools.WorkerThreadExecutor;
+import htoyama.timetable.utils.TimeUtils;
 
 /**
  * Created by toyamaosamuyu on 2014/12/30.
  */
 public class TopItemLoader {
-    private final SimpleDateFormat mSdf = new SimpleDateFormat("kk:mm");
     private Context mContext;
 
     public TopItemLoader(final Context context) {
@@ -62,11 +62,11 @@ public class TopItemLoader {
         BaseInfoDao baseInfoDao = new BaseInfoSqliteDao(mContext);
         TimetableDao timetableDao = new TimetableSqliteDao(mContext);
 
-        final String currentHhMm = mSdf.format(new Date());
-        List<TopItem> topItemList = new ArrayList<>();
-
+        final String currentHhMm = TimeUtils.stringizeDepatureTime(new Date());
         PartType partType = PartType.valueOf(new Date(), mContext);
         List<BaseInfo> baseInfoList = baseInfoDao.findBy(partType);
+
+        List<TopItem> topItemList = new ArrayList<>();
 
         for (BaseInfo baseInfo : baseInfoList) {
             Timetable timetable = timetableDao.findBy(baseInfo.id, currentHhMm);
