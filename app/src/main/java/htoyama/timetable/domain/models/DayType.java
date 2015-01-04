@@ -1,5 +1,7 @@
 package htoyama.timetable.domain.models;
 
+import android.util.Log;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -35,7 +37,7 @@ public enum DayType {
         switch (now.get(Calendar.DAY_OF_WEEK)) {
             case Calendar.SATURDAY:
                 return SATURDAY;
-            case Calendar.MONDAY:
+            case Calendar.SUNDAY:
                 return HOLIDAY;
             default:
                 return WEEKDAY;
