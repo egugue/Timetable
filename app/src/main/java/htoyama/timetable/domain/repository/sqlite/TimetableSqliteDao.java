@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 
 import htoyama.timetable.domain.models.DayType;
 import htoyama.timetable.domain.models.Time;
@@ -55,18 +56,12 @@ public class TimetableSqliteDao implements TimetableDao{
     public Timetable findBy(int baseId, String afterDepatureTime) {
         SQLiteDatabase db = mHelper.getReadableDatabase();
 
-        String query = "SELECT * FROM " + TABLE_TIMETABLE
-                + " WHERE"
-                + " " + COL_TIMETABLE_BASE_INFO_ID + " = " + baseId;
-
-        if (afterDepatureTime != null) {
-            afterDepatureTime = TimeUtils.convertMidnightTimeIfNeeded(afterDepatureTime, false);
-            query += " AND"
-                    + " " + COL_TIMETABLE_DEPATURE_TIME + " >= '"+afterDepatureTime+"'";
-        }
+        String query = getDefaultSelectQuery(baseId);
+        query += " AND"
+                + " " + COL_TIMETABLE_DEPATURE_TIME + " >= '"+afterDepatureTime+"'";
 
         query = attacheLimitPhraseIfNeeded(query);
-        //Log.d(TAG,, query);
+        //Log.d(TAG, query);
 
         Cursor cursor = db.rawQuery(query, null);
 
