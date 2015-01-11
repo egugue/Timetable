@@ -99,14 +99,6 @@ public class TopActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 refresh();
-                /*
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 5000);
-                */
             }
         });
 

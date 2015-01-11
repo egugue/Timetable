@@ -1,4 +1,3 @@
 /build
-src/main/assets/*
 src/main/java/htoyama/timetable/presentation/listeners/*
-src/main/java/htoyama/timetable/presentation/activities/InputActivity.java
+app/src/main/java/htoyama/timetable/domain/repository/TimetableFileParser.java

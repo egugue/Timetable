@@ -14,9 +14,9 @@ public class TopItemTest {
 
     @Before
     public void setUp() {
-        BaseInfo baseInfo = new BaseInfo(1, "station", "train", "boundForName", DayType.WEEKDAY, PartType.GOING_TO_WORK, new Date());
+        BaseInfo baseInfo = new BaseInfo(1, "station", "train", "boundForName", PartType.GOING_TO_WORK, new Date());
         Timetable timetable = new Timetable();
-        timetable.add(new Time(1, TrainType.LOCAL, "depatureTime", "destination"));
+        timetable.add(new Time(1, DayType.WEEKDAY, TrainType.LOCAL, "depatureTime", "destination"));
 
         sut = new TopItem(baseInfo, timetable);
     }
