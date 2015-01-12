@@ -66,44 +66,4 @@
         android:text="New Button"
         />
 
-
-    <!--
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="koma"
-        android:id="@+id/add_koma"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="yo_oo"
-        android:id="@+id/add_yo_oo"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ro"
-        android:id="@+id/add_ro"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="yo_ya"
-        android:id="@+id/add_yo_ya"/>
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="all delete"
-        android:id="@+id/all_delete_button"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="getting_text_file"
-        android:id="@+id/getting_text_file"/>
-        -->
-
 </LinearLayout>
