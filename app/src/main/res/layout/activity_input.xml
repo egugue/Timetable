@@ -6,15 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/tool_bar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:orientation="vertical">
-    </android.support.v7.widget.Toolbar>
+    <include layout="@layout/include_toolbar"/>
 
     <EditText
         android:id="@+id/input_station"

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ボタンが押されていない時 -->
+    <item android:state_pressed="false">
+        <layer-list>
+
+            <item>
+                <shape android:shape="oval" >
+                    <solid android:color="@color/adding_timetable_button_unpressed" />
+                </shape>
+            </item>
+
+            <item>
+                <bitmap
+                    android:src="@drawable/fab_add_icon"
+                    android:gravity="center"/>
+            </item>
+
+        </layer-list>
+    </item>
+
+    <!-- ボタンが押されたとき -->
+    <item android:state_pressed="true">
+        <layer-list>
+
+            <item>
+                <shape android:shape="oval" >
+                    <solid android:color="@color/adding_timetable_button_pressed" />
+                </shape>
+            </item>
+
+            <item>
+                <bitmap
+                    android:src="@drawable/fab_add_icon"
+                    android:gravity="center"/>
+            </item>
+
+        </layer-list>
+    </item>
+
+</selector>

@@ -10,6 +10,8 @@
 
     <color name="dark_scrim_gradient_start">#ad000000</color>
 
+    <color name="adding_timetable_button_unpressed">@color/theme_accent</color>
+    <color name="adding_timetable_button_pressed">@color/deep_orange_a400</color>
 
     <color name="white">#ffffff</color>
     <color name="green">#94cb08</color>

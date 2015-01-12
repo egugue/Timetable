@@ -22,4 +22,9 @@
     <dimen name="timetable_train_type_text_size">16sp</dimen>
     <dimen name="timetable_destination_text_size">16sp</dimen>
 
+    <!-- Floating Action Button -->
+    <dimen name="fab_medium_width">56dp</dimen>
+    <dimen name="fab_medium_height">56dp</dimen>
+    <dimen name="fab_elevation">8dp</dimen>
+
 </resources>

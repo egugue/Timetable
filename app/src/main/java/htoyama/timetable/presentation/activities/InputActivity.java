@@ -1,8 +1,11 @@
 package htoyama.timetable.presentation.activities;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.IntentCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -53,12 +56,17 @@ public class InputActivity extends BaseActivity {
     @InjectView(R.id.input_timetable_file_name)
     TextView mTimetableFileNameTextView;
 
+    public static Intent createIntent(final Context context) {
+        return new Intent(context, InputActivity.class);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input);
         ButterKnife.inject(this);
 
+        setupToolbar();
         setupPartTypeSpinner();
         setupDayTypeSpinner();
     }
@@ -197,6 +205,19 @@ public class InputActivity extends BaseActivity {
                 && validateTrainText()
                 && validateBoundForName()
                 && validateTimetableTextfile();
+    }
+
+    private void setupToolbar() {
+        getToolbar().setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateUpTo(
+                        IntentCompat.makeMainActivity(new ComponentName(InputActivity.this,
+                                TopActivity.class))
+                );
+            }
+        });
     }
 
     private void setupDayTypeSpinner() {

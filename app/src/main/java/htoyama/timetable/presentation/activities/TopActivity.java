@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 
 import com.squareup.otto.Subscribe;
 
@@ -14,6 +16,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import htoyama.timetable.R;
 import htoyama.timetable.domain.models.BaseInfo;
 import htoyama.timetable.domain.models.TopItem;
@@ -27,6 +30,9 @@ import htoyama.timetable.presentation.views.TimetableCardListView;
 
 
 public class TopActivity extends BaseActivity {
+
+    @InjectView(R.id.wraping_frame_layout)
+    FrameLayout mWrapingFrameLayout;
 
     @InjectView(R.id.top_timetable_list)
     TimetableCardListView mTimetableCardListView;
@@ -48,19 +54,29 @@ public class TopActivity extends BaseActivity {
         setupSwipeRefreshLayout();
         loadListItem();
 
-        getToolbar().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), InputActivity.class);
-                startActivity(intent);
-            }
-        });
+        ViewTreeObserver vto = mWrapingFrameLayout.getViewTreeObserver();
+        if (vto.isAlive()) {
+            vto.addOnGlobalLayoutListener(mGlobalLayoutListener);
+        }
     }
 
     @Override
     protected void onDestroy() {
         BusHolder.getBus().unregister(this);
         super.onDestroy();
+        if (mWrapingFrameLayout == null) {
+            return;
+        }
+
+        ViewTreeObserver vto = mWrapingFrameLayout.getViewTreeObserver();
+        if (vto.isAlive()) {
+            vto.removeOnGlobalLayoutListener(mGlobalLayoutListener);
+        }
+    }
+
+    @OnClick(R.id.fab_add_timetable)
+    public void onAddTimetableButton() {
+        startActivity( InputActivity.createIntent(this) );
     }
 
     @Subscribe
@@ -118,6 +134,14 @@ public class TopActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    private void recomputeMetrics() {
+        ViewGroup.MarginLayoutParams mlp = (StateFrameLayout.MarginLayoutParams)
+                mStateFrameLayout.getLayoutParams();
+
+        mlp.topMargin = getToolbar().getHeight();
+        mStateFrameLayout.setLayoutParams(mlp);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -134,5 +158,14 @@ public class TopActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener
+            = new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+            recomputeMetrics();
+            mWrapingFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        }
+    };
 
 }
