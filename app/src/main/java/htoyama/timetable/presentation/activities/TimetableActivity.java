@@ -1,8 +1,10 @@
 package htoyama.timetable.presentation.activities;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -141,6 +143,15 @@ public class TimetableActivity extends BaseActivity
 
     private void setupToolbar() {
         getToolbar().setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateUpTo(
+                        IntentCompat.makeMainActivity(new ComponentName(TimetableActivity.this,
+                                TopActivity.class))
+                );
+            }
+        });
     }
 
     private void setupTab() {
