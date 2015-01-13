@@ -43,7 +43,9 @@ public class BaseInfoSqliteDao implements BaseInfoDao{
                 + " " + COL_BASE_INFOS_ID + " = " + id;
 
         Cursor cursor = db.rawQuery(query, null);
-        cursor.moveToFirst();
+        if (!cursor.moveToFirst()) {
+            return null;
+        }
         BaseInfo baseInfo = BaseInfo.createWith(cursor);
         cursor.close();
         db.close();
