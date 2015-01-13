@@ -13,6 +13,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import htoyama.timetable.R;
 import htoyama.timetable.domain.models.Time;
+import htoyama.timetable.utils.TimeUtils;
 
 /**
  * Created by toyamaosamuyu on 2014/12/26.
@@ -40,7 +41,7 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind( mList.get(position) );
+        holder.bind( mList.get(position), position );
     }
 
     @Override
@@ -55,10 +56,10 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
      */
     public int getClosePosition(String depatureTime) {
         final int size = getItemCount();
-        Time time;
+
         for (int i = 0; i < size; i++) {
-            time = mList.get(i);
-            if (time.depatureTime.compareTo(depatureTime) > 0) {
+            //TODO: より良いやり方を考える (パフォーマンス的に)
+            if (TimeUtils.compareToForDepatureTime(mList.get(i), depatureTime) > 0) {
                 return i;
             }
         }
@@ -81,9 +82,9 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
             ButterKnife.inject(this, itemView);
         }
 
-        public void bind(Time item) {
+        public void bind(Time item, int position) {
             mDepartureTimeTextView.setText(item.depatureTime);
-            mTrainTypeTextView.setText(item.trainType.name);
+            mTrainTypeTextView.setText(item.trainType.name+position);
             mDestinationTextView.setText(item.destination);
         }
     }

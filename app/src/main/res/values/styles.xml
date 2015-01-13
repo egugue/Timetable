@@ -16,11 +16,22 @@
         <!--item name="android:textColorPrimary">@color/grey_900</item-->
         <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:navigationBarColor">@color/theme_nagigation_bar</item>
+
     </style>
 
 
     <style name="AppTheme" parent="AppTheme.Base">
     </style>
 
+
+    <style name="AppbarThemeOverlay" parent="">
+        <item name="colorPrimary">@color/theme_primary</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="colorControlNormal">@color/text_primary</item>
+        <!-- item name="colorControlHighlight">#3fff</item -->
+        <item name="colorControlHighlight">@color/deep_purple_200</item>
+    </style>
+
+    <style name="AppBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

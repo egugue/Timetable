@@ -18,39 +18,46 @@ public class BaseInfo implements Parcelable{
     public String station;
     public String train;
     public String boundForName;
-    public DayType dayType;
     public PartType partType;
     public Date modified;
 
-    public BaseInfo(String station, String train, String boundForName,
-                    DayType dayType, PartType partType) {
-
+    public BaseInfo(String station, String train, String boundForName, PartType partType) {
         this.station = station;
         this.train = train;
         this.boundForName = boundForName;
-        this.dayType = dayType;
         this.partType = partType;
     }
 
     public BaseInfo(int id, String station, String train, String boundForName,
-                    DayType dayType, PartType partType, Date modified) {
+                    PartType partType, Date modified) {
 
         this.id = id;
         this.station = station;
         this.train = train;
         this.boundForName = boundForName;
         this.partType = partType;
-        this.dayType = dayType;
         this.modified = modified;
     }
 
+
+    @Override
+    public BaseInfo clone() {
+        return new BaseInfo(
+                id,
+                station,
+                train,
+                boundForName,
+                partType,
+                new Date(modified.getTime())
+        );
+    }
+
     public static BaseInfo createWith(Cursor cursor) {
-        int dayTypeId = cursor.getInt(4);
-        int partTypeId = cursor.getInt(5);
+        int partTypeId = cursor.getInt(4);
 
         Date date = null;
         try {
-            date = SDF.parse(cursor.getString(6));
+            date = SDF.parse(cursor.getString(5));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -60,7 +67,6 @@ public class BaseInfo implements Parcelable{
             cursor.getString(1),
             cursor.getString(2),
             cursor.getString(3),
-            DayType.valueOf(dayTypeId),
             PartType.valueOf(partTypeId),
             date
         );
@@ -71,16 +77,12 @@ public class BaseInfo implements Parcelable{
         String partStr = "null";
         if (partType != null)  partStr = partType.toString();
 
-        String dayStr = "null";
-        if (dayType != null) dayStr = dayType.toString();
-
         return "BaseInfo[ "
                 + "id= " + id
                 + ",  station= " + station
                 + ",  train = " + train
                 + ",  boundForName = " + boundForName
                 + ",  partType = " + partStr
-                + ",  dayType = " + dayStr
                 + ",  modified = " +  modified
                 + " ]";
     }

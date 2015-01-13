@@ -4,10 +4,10 @@ package htoyama.timetable.domain.models;
  * Created by toyamaosamuyu on 2014/12/31.
  */
 public enum TrainType {
-    LOCAL(1,"各駅"),
-    EXPRESS(2, "急行"),
-    RAPID(3, "快速"),
-    SEMI_RAPID(4, "準急");
+    LOCAL(0,"普通"),
+    EXPRESS(1, "急行"),
+    RAPID(2, "快速"),
+    SEMI_RAPID(3, "準急");
 
     public final int id;
     public final String name;
@@ -23,6 +23,6 @@ public enum TrainType {
                 return trainType;
             }
         }
-        return null;
+        throw new IllegalArgumentException("no such enum object for the id: " + id);
     }
 }

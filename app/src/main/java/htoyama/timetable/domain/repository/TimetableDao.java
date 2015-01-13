@@ -29,6 +29,8 @@ public interface TimetableDao {
 
     public Timetable findBy(int baseId, String afterDepatureTIme);
 
+    public Timetable findBy(int baseId, DayType dayType);
+
 
     public Timetable findAll();
 

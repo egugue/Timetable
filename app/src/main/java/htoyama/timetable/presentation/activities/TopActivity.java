@@ -1,32 +1,28 @@
 package htoyama.timetable.presentation.activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 
 import com.squareup.otto.Subscribe;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import htoyama.timetable.R;
 import htoyama.timetable.domain.models.BaseInfo;
 import htoyama.timetable.domain.models.TopItem;
-import htoyama.timetable.domain.repository.TopItemLoader;
+import htoyama.timetable.domain.repository.loaders.TopItemLoader;
 import htoyama.timetable.events.BusHolder;
+import htoyama.timetable.events.ChangeTimetableDataCompleteEvent;
 import htoyama.timetable.events.ClickTopItemEvent;
 import htoyama.timetable.events.LoadTopItemListCompleteEvent;
 import htoyama.timetable.presentation.views.StateFrameLayout;
@@ -34,6 +30,9 @@ import htoyama.timetable.presentation.views.TimetableCardListView;
 
 
 public class TopActivity extends BaseActivity {
+
+    @InjectView(R.id.wraping_frame_layout)
+    FrameLayout mWrapingFrameLayout;
 
     @InjectView(R.id.top_timetable_list)
     TimetableCardListView mTimetableCardListView;
@@ -55,20 +54,29 @@ public class TopActivity extends BaseActivity {
         setupSwipeRefreshLayout();
         loadListItem();
 
-        getToolbar().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), InputActivity.class);
-                startActivity(intent);
-            }
-        });
-
+        ViewTreeObserver vto = mWrapingFrameLayout.getViewTreeObserver();
+        if (vto.isAlive()) {
+            vto.addOnGlobalLayoutListener(mGlobalLayoutListener);
+        }
     }
 
     @Override
     protected void onDestroy() {
         BusHolder.getBus().unregister(this);
         super.onDestroy();
+        if (mWrapingFrameLayout == null) {
+            return;
+        }
+
+        ViewTreeObserver vto = mWrapingFrameLayout.getViewTreeObserver();
+        if (vto.isAlive()) {
+            vto.removeOnGlobalLayoutListener(mGlobalLayoutListener);
+        }
+    }
+
+    @OnClick(R.id.fab_add_timetable)
+    public void onAddTimetableButton() {
+        startActivity( InputActivity.createIntent(this) );
     }
 
     @Subscribe
@@ -90,6 +98,11 @@ public class TopActivity extends BaseActivity {
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
+    @Subscribe
+    public void onChangeTimetableDataComplete(ChangeTimetableDataCompleteEvent event) {
+        loadListItem();
+    }
+
     private void setupSwipeRefreshLayout() {
         final Resources res = getResources();
         mSwipeRefreshLayout.setColorSchemeColors(
@@ -102,23 +115,12 @@ public class TopActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 refresh();
-                /*
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 5000);
-                */
             }
         });
 
     }
 
     private void refresh() {
-        Animator animator = AnimatorInflater.loadAnimator(this, R.animator.card_slide_out);
-        animator.setTarget(mTimetableCardListView);
-        animator.start();
         loadListItem();
     }
 
@@ -130,6 +132,14 @@ public class TopActivity extends BaseActivity {
     private void openTimetableActivity(BaseInfo baseInfo) {
         Intent intent = TimetableActivity.createIntent(getApplicationContext(), baseInfo);
         startActivity(intent);
+    }
+
+    private void recomputeMetrics() {
+        ViewGroup.MarginLayoutParams mlp = (StateFrameLayout.MarginLayoutParams)
+                mStateFrameLayout.getLayoutParams();
+
+        mlp.topMargin = getToolbar().getHeight();
+        mStateFrameLayout.setLayoutParams(mlp);
     }
 
     @Override
@@ -148,5 +158,14 @@ public class TopActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener
+            = new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+            recomputeMetrics();
+            mWrapingFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        }
+    };
 
 }

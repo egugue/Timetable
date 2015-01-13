@@ -1,19 +1,10 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/wraping_frame_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TopActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/tool_bar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:orientation="vertical">
-    </android.support.v7.widget.Toolbar>
-
-    <!-- リスト部分 -->
     <htoyama.timetable.presentation.views.StateFrameLayout
         android:id="@+id/state_frame_layout"
         android:layout_width="match_parent"
@@ -21,8 +12,8 @@
         android:layout_below="@+id/tool_bar"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="@dimen/spacing_medium"
+        android:layout_marginRight="@dimen/spacing_medium"
         >
 
         <android.support.v4.widget.SwipeRefreshLayout
@@ -35,8 +26,8 @@
                 android:id="@+id/top_timetable_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
+                android:paddingTop="@dimen/spacing_medium"
+                android:paddingBottom="@dimen/spacing_medium"
                 android:clipToPadding="false"
             />
 
@@ -44,4 +35,16 @@
 
     </htoyama.timetable.presentation.views.StateFrameLayout>
 
-</RelativeLayout>
+    <include layout="@layout/include_toolbar"/>
+
+    <ImageView
+        android:id="@+id/fab_add_timetable"
+        android:layout_width="@dimen/fab_medium_width"
+        android:layout_height="@dimen/fab_medium_height"
+        android:layout_gravity="right|bottom"
+        android:layout_marginRight="@dimen/spacing_large"
+        android:layout_marginBottom="@dimen/spacing_large"
+        android:background="@drawable/adding_timetable_icon"
+        android:elevation="@dimen/fab_elevation" />
+
+</FrameLayout>

@@ -18,7 +18,7 @@ public class BaseInfoDaoStub implements BaseInfoDao {
     @Override
     public BaseInfo findById(int id) {
         return new BaseInfo(id, "池袋", "山手線", "新宿・渋谷方面",
-                DayType.WEEKDAY, PartType.GO_TO_WORK, new Date());
+                PartType.GOING_TO_WORK, new Date());
     }
 
     @Override
@@ -26,7 +26,7 @@ public class BaseInfoDaoStub implements BaseInfoDao {
         List<BaseInfo> list = new ArrayList<>();
 
         BaseInfo baseInfo = new BaseInfo(1, "池袋", "山手線", "新宿・渋谷方面",
-                DayType.WEEKDAY, PartType.GO_TO_WORK, new Date());
+                PartType.GOING_TO_WORK, new Date());
         for (int i = 0; i < 10; i++) {
             list.add(baseInfo);
         }

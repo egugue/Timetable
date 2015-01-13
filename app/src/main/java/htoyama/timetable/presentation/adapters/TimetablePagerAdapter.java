@@ -18,7 +18,8 @@ import htoyama.timetable.domain.models.DayType;
 import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.domain.repository.TimetableDao;
 import htoyama.timetable.domain.repository.sqlite.TimetableSqliteDao;
-import htoyama.timetable.presentation.views.DividerItemDecoration;
+import htoyama.timetable.presentation.decorations.DividerItemDecoration;
+import htoyama.timetable.utils.TimeUtils;
 
 
 /**
@@ -32,7 +33,6 @@ public class TimetablePagerAdapter extends PagerAdapter{
     private OnStateChangeListener mStateChangeListener;
     private DividerItemDecoration mDividerItemDecoration;
     private BaseInfo mBaseInfo;
-    private String mCurrentHhMm= new SimpleDateFormat("hh:mm").format(new Date());
 
     public static interface OnStateChangeListener {
         public void onScrolledTimetable(RecyclerView recyclerView, int dx, int dy);
@@ -54,8 +54,7 @@ public class TimetablePagerAdapter extends PagerAdapter{
 
     @Override
     public CharSequence getPageTitle(int position) {
-        int id = position + 1;
-        return DayType.valueOf(id).name;
+        return DayType.valueOf(position).name;
     }
 
     @Override
@@ -68,15 +67,15 @@ public class TimetablePagerAdapter extends PagerAdapter{
 
         mTimetableRecyclerView = (RecyclerView) view.findViewById(R.id.pager_item_timetable_list);
 
-        DayType dayType = DayType.values()[position];
+        DayType dayType = DayType.valueOf(position);
 
-        //TimetableDao timetableDao = new TimetableDaoStub();
         TimetableDao timetableDao = new TimetableSqliteDao(view.getContext());
 
-        Timetable timetable = timetableDao.findBy(mBaseInfo.id);
+        Timetable timetable = timetableDao.findBy(mBaseInfo.id, dayType);
         setupTimetable(context, timetable);
 
-        int closePosition = mTimetableAdapter.getClosePosition(mCurrentHhMm);
+        String currentHhMm = TimeUtils.stringizeDepatureTime(new Date());
+        int closePosition = mTimetableAdapter.getClosePosition(currentHhMm);
         mTimetableRecyclerView.scrollToPosition(closePosition);
 
         return view;
@@ -85,7 +84,6 @@ public class TimetablePagerAdapter extends PagerAdapter{
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
-        Log.i("HOGE", "destroyItem() [position: " + position + "]");
     }
 
     public void setOnStateChangeLister(OnStateChangeListener lister) {

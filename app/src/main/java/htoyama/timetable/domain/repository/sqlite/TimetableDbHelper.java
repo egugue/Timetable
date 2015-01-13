@@ -35,7 +35,6 @@ public class TimetableDbHelper extends SQLiteOpenHelper{
                 + ", "+COL_BASE_INFOS_STATION+" "+TYPE_TEXT
                 + ", "+COL_BASE_INFOS_TRAIN+" "+TYPE_TEXT
                 + ", "+COL_BASE_INFOS_BOUND_FOR_NAME+" "+TYPE_TEXT
-                + ", "+COL_BASE_INFOS_DAY_TYPE+" "+TYPE_INTEGER
                 + ", "+COL_BASE_INFOS_PART_TYPE+" "+TYPE_INTEGER
                 + ", "+COL_BASE_INFOS_MODIFIED+" "+TYPE_TEXT
                 + ");";
@@ -50,6 +49,7 @@ public class TimetableDbHelper extends SQLiteOpenHelper{
                 "CREATE TABLE IF NOT EXISTS "+TABLE_TIMETABLE
                 + "("
                 + " "+COL_TIMETABLE_BASE_INFO_ID+" "+TYPE_INTEGER
+                + ", "+COL_TIMETABLE_DAY_TYPE+" "+TYPE_INTEGER
                 + ", "+COL_TIMETABLE_TRAIN_TYPE+" "+TYPE_INTEGER
                 + ", "+COL_TIMETABLE_DEPATURE_TIME+" "+TYPE_TEXT
                 + ", "+COL_TIMETABLE_DESTINATION+" "+TYPE_TEXT

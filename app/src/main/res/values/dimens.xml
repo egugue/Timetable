@@ -7,8 +7,10 @@
     <dimen name="spacing_small">4dp</dimen>
     <dimen name="spacing_medium">8dp</dimen>
     <dimen name="spacing_large">16dp</dimen>
-    
-    
+
+    <!-- TOP -->
+    <dimen name="top_list_item_header_text_size">16sp</dimen>
+
     <!-- カード -->
     <dimen name="card_content_padding">16dp</dimen>
     <dimen name="card_content_text_size_middle">16sp</dimen>
@@ -19,5 +21,10 @@
     <dimen name="timetable_depature_time_text_size">40sp</dimen>
     <dimen name="timetable_train_type_text_size">16sp</dimen>
     <dimen name="timetable_destination_text_size">16sp</dimen>
+
+    <!-- Floating Action Button -->
+    <dimen name="fab_medium_width">56dp</dimen>
+    <dimen name="fab_medium_height">56dp</dimen>
+    <dimen name="fab_elevation">8dp</dimen>
 
 </resources>

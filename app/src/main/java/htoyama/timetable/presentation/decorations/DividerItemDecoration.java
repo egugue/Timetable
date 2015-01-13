@@ -1,4 +1,4 @@
-package htoyama.timetable.presentation.views;
+package htoyama.timetable.presentation.decorations;
 
 import android.content.Context;
 import android.content.res.TypedArray;
