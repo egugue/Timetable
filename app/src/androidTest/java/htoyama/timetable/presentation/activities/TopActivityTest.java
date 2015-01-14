@@ -1,5 +1,6 @@
 package htoyama.timetable.presentation.activities;
 
+import android.app.Instrumentation;
 import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.assertion.ViewAssertions;
 import android.test.ActivityInstrumentationTestCase2;
@@ -19,6 +20,8 @@ import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.*;
 import static android.support.test.espresso.Espresso.onView;
 
+import static android.app.Instrumentation.ActivityMonitor;
+
 public class TopActivityTest extends ActivityInstrumentationTestCase2<TopActivity>{
 
     public TopActivityTest() {
@@ -33,9 +36,11 @@ public class TopActivityTest extends ActivityInstrumentationTestCase2<TopActivit
 
     @Test
     public void testタイムテーブル追加ボタンを押すとInputActivityに遷移する() throws Exception {
+        ActivityMonitor monitor = getInstrumentation().addMonitor(InputActivity.class.getName(), null, true);
+
         onView(withId(R.id.fab_add_timetable)).perform(click());
-        onView(withId(R.id.input_bound_for_name)).check(
-                (matches(isDisplayed()))
-        );
+        assertThat(monitor.getHits(), is(1));
+
+        getInstrumentation().removeMonitor(monitor);
     }
 }
