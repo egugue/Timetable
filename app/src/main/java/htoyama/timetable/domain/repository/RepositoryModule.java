@@ -5,6 +5,7 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
+import htoyama.timetable.IsMockMode;
 import htoyama.timetable.domain.repository.loaders.TimeableLoader;
 import htoyama.timetable.domain.repository.loaders.TopItemLoader;
 import htoyama.timetable.domain.repository.sqlite.BaseInfoSqliteDao;
@@ -29,7 +30,10 @@ import htoyama.timetable.domain.repository.stub.BaseInfoDaoStub;
 public class RepositoryModule {
 
     @Provides
-    BaseInfoDao provideBaseInfoDao(Application application) {
+    BaseInfoDao provideBaseInfoDao(Application application, @IsMockMode boolean isMockMode) {
+        if (isMockMode) {
+            return new BaseInfoDaoStub();
+        }
         return new BaseInfoSqliteDao(application);
     }
 

@@ -18,7 +18,7 @@ public class TimetableApp extends Application{
     public void onCreate() {
         super.onCreate();
         sInstance = this;
-        mGraph = Graph.Initializer.init(this, true);
+        mGraph = Graph.Initializer.init(this, false);
     }
 
     public static TimetableApp getInstance() {

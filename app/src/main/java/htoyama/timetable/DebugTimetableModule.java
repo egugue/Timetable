@@ -39,4 +39,9 @@ public final class DebugTimetableModule {
     Application provideApplication() {
         return mApplication;
     }
+
+    @Provides @IsMockMode
+    boolean provideIsMockMode() {
+        return mIsMockMode;
+    }
 }
