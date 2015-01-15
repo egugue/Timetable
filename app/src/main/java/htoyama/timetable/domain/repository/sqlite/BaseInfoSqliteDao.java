@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import htoyama.timetable.TimetableApp;
 import htoyama.timetable.domain.models.BaseInfo;
 import htoyama.timetable.domain.models.PartType;
 import htoyama.timetable.domain.repository.BaseInfoDao;
@@ -27,10 +30,14 @@ import static htoyama.timetable.domain.repository.sqlite.TimetableDbConstants.CO
  */
 public class BaseInfoSqliteDao implements BaseInfoDao{
     private static final String TAG = BaseInfoSqliteDao.class.getSimpleName();
-    private TimetableDbHelper mHelper;
+
+    @Inject TimetableDbHelper mHelper;
 
     public BaseInfoSqliteDao(final Context context) {
-        mHelper = new TimetableDbHelper(context);
+        //mHelper = new TimetableDbHelper(context);
+        SqliteGraph.Initializer
+                .init(TimetableApp.get(context))
+                .inject(this);
     }
 
     @Override

@@ -6,14 +6,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import htoyama.timetable.TimetableApp;
 import htoyama.timetable.domain.models.BaseInfo;
 import htoyama.timetable.domain.models.PartType;
 import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.domain.models.TopItem;
 import htoyama.timetable.domain.repository.BaseInfoDao;
+import htoyama.timetable.domain.repository.RepositoryGraph;
 import htoyama.timetable.domain.repository.TimetableDao;
-import htoyama.timetable.domain.repository.sqlite.BaseInfoSqliteDao;
-import htoyama.timetable.domain.repository.sqlite.TimetableSqliteDao;
 import htoyama.timetable.events.BusHolder;
 import htoyama.timetable.events.LoadTopItemListCompleteEvent;
 import htoyama.timetable.tools.MainThreadExecutor;
@@ -26,8 +28,15 @@ import htoyama.timetable.utils.TimeUtils;
 public class TopItemLoader {
     private Context mContext;
 
+    @Inject BaseInfoDao baseInfoDao;
+    @Inject TimetableDao timetableDao;
+
     public TopItemLoader(final Context context) {
         mContext = context;
+        RepositoryGraph.Initializer.
+                init(TimetableApp.get(context))
+                .inject(this);
+
     }
 
     public void loadTopItemList() {
@@ -58,8 +67,8 @@ public class TopItemLoader {
     }
 
     private List<TopItem> getTopItemList() {
-        BaseInfoDao baseInfoDao = new BaseInfoSqliteDao(mContext);
-        TimetableDao timetableDao = new TimetableSqliteDao(mContext);
+        //BaseInfoDao baseInfoDao = new BaseInfoSqliteDao(mContext);
+        //TimetableDao timetableDao = new TimetableSqliteDao(mContext);
 
         final String currentHhMm24 = TimeUtils.stringizeDepatureTime(new Date());
         final String currentHhMm00 = TimeUtils.convertMidnightTimeIfNeeded(currentHhMm24, true);
