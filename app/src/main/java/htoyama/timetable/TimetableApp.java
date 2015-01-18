@@ -27,7 +27,7 @@ public class TimetableApp extends Application{
         return (TimetableApp) context.getApplicationContext();
     }
 
-    public Graph getComponent() {
+    public TimetableComponent getComponent() {
         return mComponent;
     }
 
