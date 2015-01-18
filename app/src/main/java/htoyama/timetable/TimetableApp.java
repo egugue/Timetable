@@ -18,7 +18,7 @@ public class TimetableApp extends Application{
         buildComponentAndInject();
     }
 
-    public void buildComponentAndInject() {
+    private void buildComponentAndInject() {
         mComponent = TimetableComponent.Initializer.init(this);
         mComponent.inject(this);
     }
