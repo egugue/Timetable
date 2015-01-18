@@ -1,10 +1,13 @@
 package htoyama.timetable.domain.repository.loaders;
 
+import android.app.Application;
 import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import htoyama.timetable.domain.models.BaseInfo;
 import htoyama.timetable.domain.models.PartType;
@@ -12,8 +15,6 @@ import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.domain.models.TopItem;
 import htoyama.timetable.domain.repository.BaseInfoDao;
 import htoyama.timetable.domain.repository.TimetableDao;
-import htoyama.timetable.domain.repository.sqlite.BaseInfoSqliteDao;
-import htoyama.timetable.domain.repository.sqlite.TimetableSqliteDao;
 import htoyama.timetable.events.BusHolder;
 import htoyama.timetable.events.LoadTopItemListCompleteEvent;
 import htoyama.timetable.tools.MainThreadExecutor;
@@ -24,10 +25,15 @@ import htoyama.timetable.utils.TimeUtils;
  * Created by toyamaosamuyu on 2014/12/30.
  */
 public class TopItemLoader {
+    private BaseInfoDao mBaseInfoDao;
+    private TimetableDao mTimetableDao;
     private Context mContext;
 
-    public TopItemLoader(final Context context) {
-        mContext = context;
+    @Inject
+    public TopItemLoader(Application app, BaseInfoDao baseInfoDao, TimetableDao timetableDao) {
+        mContext = app.getApplicationContext();
+        mBaseInfoDao = baseInfoDao;
+        mTimetableDao = timetableDao;
     }
 
     public void loadTopItemList() {
@@ -58,23 +64,20 @@ public class TopItemLoader {
     }
 
     private List<TopItem> getTopItemList() {
-        BaseInfoDao baseInfoDao = new BaseInfoSqliteDao(mContext);
-        TimetableDao timetableDao = new TimetableSqliteDao(mContext);
-
         final String currentHhMm24 = TimeUtils.stringizeDepatureTime(new Date());
         final String currentHhMm00 = TimeUtils.convertMidnightTimeIfNeeded(currentHhMm24, true);
 
         PartType partType = PartType.valueOf(new Date(), mContext);
-        List<BaseInfo> baseInfoList = baseInfoDao.findBy(partType);
+        List<BaseInfo> baseInfoList = mBaseInfoDao.findBy(partType);
 
         List<TopItem> topItemList = new ArrayList<>();
 
         for (BaseInfo baseInfo : baseInfoList) {
 
-            Timetable timetable = timetableDao.findBy(baseInfo.id, currentHhMm24);
+            Timetable timetable = mTimetableDao.findBy(baseInfo.id, currentHhMm24);
             if (timetable.isEmpty()) {
                 //0時表記で再度検索し、早朝のタイムテーブルを取得する
-                timetable = timetableDao.findBy(baseInfo.id, currentHhMm00);
+                timetable = mTimetableDao.findBy(baseInfo.id, currentHhMm00);
             }
 
             topItemList.add(new TopItem(baseInfo, timetable));

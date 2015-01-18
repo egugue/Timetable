@@ -14,10 +14,13 @@ import com.squareup.otto.Subscribe;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import htoyama.timetable.R;
+import htoyama.timetable.TimetableApp;
 import htoyama.timetable.domain.models.BaseInfo;
 import htoyama.timetable.domain.models.TopItem;
 import htoyama.timetable.domain.repository.loaders.TopItemLoader;
@@ -43,11 +46,15 @@ public class TopActivity extends BaseActivity {
     @InjectView(R.id.state_frame_layout)
     StateFrameLayout mStateFrameLayout;
 
+    @Inject
+    TopItemLoader mTopItemLoader;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top);
 
+        TimetableApp.get(this).getComponent().inject(this);
         ButterKnife.inject(this);
         BusHolder.getBus().register(this);
 
@@ -126,7 +133,7 @@ public class TopActivity extends BaseActivity {
 
     private void loadListItem() {
         mStateFrameLayout.showProgress();
-        new TopItemLoader(this).loadTopItemList();
+        mTopItemLoader.loadTopItemList();
     }
 
     private void openTimetableActivity(BaseInfo baseInfo) {

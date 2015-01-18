@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import htoyama.timetable.domain.models.BaseInfo;
-import htoyama.timetable.domain.models.DayType;
 import htoyama.timetable.domain.models.PartType;
 import htoyama.timetable.domain.repository.BaseInfoDao;
 
@@ -25,13 +24,13 @@ public class BaseInfoDaoStub implements BaseInfoDao {
     public List<BaseInfo> findBy(PartType partType) {
         List<BaseInfo> list = new ArrayList<>();
 
-        BaseInfo baseInfo = new BaseInfo(1, "池袋", "山手線", "新宿・渋谷方面",
-                PartType.GOING_TO_WORK, new Date());
-        for (int i = 0; i < 10; i++) {
+        BaseInfo baseInfo;
+        for (int i = 0; i < 5; i++) {
+            baseInfo = new BaseInfo(i, i+"池袋", "山手線", "新宿・渋谷方面", partType, new Date());
             list.add(baseInfo);
         }
 
-        return  list;
+        return list;
     }
 
     @Override

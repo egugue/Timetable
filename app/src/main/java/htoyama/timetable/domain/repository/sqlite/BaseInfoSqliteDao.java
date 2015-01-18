@@ -27,6 +27,7 @@ import static htoyama.timetable.domain.repository.sqlite.TimetableDbConstants.CO
  */
 public class BaseInfoSqliteDao implements BaseInfoDao{
     private static final String TAG = BaseInfoSqliteDao.class.getSimpleName();
+
     private TimetableDbHelper mHelper;
 
     public BaseInfoSqliteDao(final Context context) {

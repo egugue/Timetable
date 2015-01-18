@@ -13,6 +13,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import htoyama.timetable.R;
 import htoyama.timetable.domain.models.Time;
+import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.utils.TimeUtils;
 
 /**
