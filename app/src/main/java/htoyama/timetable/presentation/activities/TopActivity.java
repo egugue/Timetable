@@ -27,9 +27,17 @@ import htoyama.timetable.events.ClickTopItemEvent;
 import htoyama.timetable.events.LoadTopItemListCompleteEvent;
 import htoyama.timetable.presentation.views.StateFrameLayout;
 import htoyama.timetable.presentation.views.TimetableCardListView;
+import rx.Observable;
+import rx.Subscription;
+import rx.android.observables.AndroidObservable;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.Subscriptions;
 
 
 public class TopActivity extends BaseActivity {
+
+    private Subscription mTimelineSub = Subscriptions.empty();
 
     @InjectView(R.id.wraping_frame_layout)
     FrameLayout mWrapingFrameLayout;
@@ -62,11 +70,12 @@ public class TopActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        BusHolder.getBus().unregister(this);
         super.onDestroy();
-        if (mWrapingFrameLayout == null) {
-            return;
-        }
+
+        BusHolder.getBus().unregister(this);
+        mTimelineSub.unsubscribe();
+
+        if (mWrapingFrameLayout != null) return;
 
         ViewTreeObserver vto = mWrapingFrameLayout.getViewTreeObserver();
         if (vto.isAlive()) {
@@ -76,26 +85,12 @@ public class TopActivity extends BaseActivity {
 
     @OnClick(R.id.fab_add_timetable)
     public void onAddTimetableButton() {
-        startActivity( InputActivity.createIntent(this) );
+        startActivity(InputActivity.createIntent(this));
     }
 
     @Subscribe
     public void onListItemClick(ClickTopItemEvent event) {
         openTimetableActivity(event.getTopItem().baseInfo);
-    }
-
-    @Subscribe
-    public void onLoadTopItemListComplete(LoadTopItemListCompleteEvent event) {
-        List<TopItem> list = event.getTopItemList();
-
-        if (list.isEmpty()) {
-            mStateFrameLayout.showError();
-            return;
-        }
-
-        mStateFrameLayout.showContent();
-        mTimetableCardListView.setupList(list);
-        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Subscribe
@@ -126,7 +121,22 @@ public class TopActivity extends BaseActivity {
 
     private void loadListItem() {
         mStateFrameLayout.showProgress();
-        new TopItemLoader(this).loadTopItemList();
+
+        mTimelineSub =  AndroidObservable.bindActivity(this,new TopItemLoader(this).getTopItemStream(this))
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Action1<List<TopItem>>() {
+                    @Override
+                    public void call(List<TopItem> topItems) {
+                        if (topItems.isEmpty()) {
+                            mStateFrameLayout.showError();
+                            return;
+                        }
+
+                        mStateFrameLayout.showContent();
+                        mTimetableCardListView.setupList(topItems);
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                });
     }
 
     private void openTimetableActivity(BaseInfo baseInfo) {
@@ -167,5 +177,28 @@ public class TopActivity extends BaseActivity {
             mWrapingFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
         }
     };
+
+    /*
+    @Subscribe
+    public void onLoadTopItemListComplete(LoadTopItemListCompleteEvent event) {
+        List<TopItem> list = event.getTopItemList();
+
+        if (list.isEmpty()) {
+            mStateFrameLayout.showError();
+            return;
+        }
+
+        mStateFrameLayout.showContent();
+        mTimetableCardListView.setupList(list);
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+    */
+
+    /*
+    private void loadListItem() {
+        mStateFrameLayout.showProgress();
+        new TopItemLoader(this).loadTopItemList();
+    }
+    */
 
 }

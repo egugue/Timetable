@@ -60,6 +60,29 @@ public class TimetablePagerAdapter extends PagerAdapter{
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         final Context context = container.getContext();
+        View view = LayoutInflater.from(context)
+                .inflate(R.layout.pager_item_timetable, container, false);
+        container.addView(view);
+        mTimetableRecyclerView = (RecyclerView) view.findViewById(R.id.pager_item_timetable_list);
+
+        DayType dayType = DayType.valueOf(position);
+        TimetableDao timetableDao = new TimetableSqliteDao(view.getContext());
+        Timetable timetable = timetableDao.findBy(mBaseInfo.id, dayType);
+
+
+
+
+        setupTimetable(context, timetable);
+        String currentHhMm = TimeUtils.stringizeDepatureTime(new Date());
+        int closePosition = mTimetableAdapter.getClosePosition(currentHhMm);
+        mTimetableRecyclerView.scrollToPosition(closePosition);
+
+        return view;
+    }
+    /*
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        final Context context = container.getContext();
 
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.pager_item_timetable, container, false);
@@ -70,7 +93,6 @@ public class TimetablePagerAdapter extends PagerAdapter{
         DayType dayType = DayType.valueOf(position);
 
         TimetableDao timetableDao = new TimetableSqliteDao(view.getContext());
-
         Timetable timetable = timetableDao.findBy(mBaseInfo.id, dayType);
         setupTimetable(context, timetable);
 
@@ -80,6 +102,7 @@ public class TimetablePagerAdapter extends PagerAdapter{
 
         return view;
     }
+    */
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
