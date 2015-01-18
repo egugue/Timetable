@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.otto.Subscribe;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,7 +19,10 @@ import htoyama.timetable.domain.models.BaseInfo;
 import htoyama.timetable.domain.models.DayType;
 import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.domain.repository.TimetableDao;
+import htoyama.timetable.domain.repository.loaders.TimeableLoader;
 import htoyama.timetable.domain.repository.sqlite.TimetableSqliteDao;
+import htoyama.timetable.events.BusHolder;
+import htoyama.timetable.events.LoadTimetableCompleteEvent;
 import htoyama.timetable.presentation.decorations.DividerItemDecoration;
 import htoyama.timetable.utils.TimeUtils;
 
@@ -68,9 +73,7 @@ public class TimetablePagerAdapter extends PagerAdapter{
         mTimetableRecyclerView = (RecyclerView) view.findViewById(R.id.pager_item_timetable_list);
 
         DayType dayType = DayType.valueOf(position);
-
         TimetableDao timetableDao = new TimetableSqliteDao(view.getContext());
-
         Timetable timetable = timetableDao.findBy(mBaseInfo.id, dayType);
         setupTimetable(context, timetable);
 
