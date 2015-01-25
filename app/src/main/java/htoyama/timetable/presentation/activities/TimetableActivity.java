@@ -1,5 +1,6 @@
 package htoyama.timetable.presentation.activities;
 
+import android.animation.ObjectAnimator;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -29,7 +31,7 @@ import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
 
 public class TimetableActivity extends BaseActivity
-        implements MaterialTabListener, TimetablePagerAdapter.OnStateChangeListener {
+        implements MaterialTabListener, TimetablePagerAdapter.OnStateChangeListener, TimetablePagerAdapter.OnUpOrCancelListener {
 
     private static final String EXSTRA_KEY_BASE_INFO = "BASE_INFO";
 
@@ -77,68 +79,9 @@ public class TimetableActivity extends BaseActivity
         }
     }
 
-
-    private int sumY = 0;
-
-    @Override
-    public void onScrolledTimetable(RecyclerView recyclerView, int dx, int dy) {
-        if (dy == 0) {
-            return;
-        }
-
-        /*
-        //下方向にスクロール
-        if (dy > 0) {
-
-            //まだタブ以下だったら
-            if (sumY <= firstY) {
-                sumY += dy;
-                if (sumY > firstY) sumY = firstY;
-
-                mHeaderView.setTranslationY(-sumY);
-                //recyclerView.setTranslationY(-sumY);
-                mViewPager.setTranslationY(-sumY);
-            }
-
-            return;
-        }
-
-        //以下は、上方向にスクロール
-
-        //まだツールバー全体が見えていないなら
-        if (sumY > 0) {
-            sumY += dy;
-
-            //もと画面以上の値になったら修正
-            if (sumY < 0) sumY = 0;
-
-            mHeaderView.setTranslationY(-sumY);
-            //recyclerView.setTranslationY(sumY);
-        }
-        */
-
-        //recyclerView.setTranslationY(dy);
-
-        /*
-        if (!isHideBar) {
-            isHideBar = true;
-            int height = getToolbar().getHeight();
-            mHeaderView.setTranslationY(-height);
-
-            ViewPager.MarginLayoutParams mlp = (ViewPager.MarginLayoutParams)
-                    mViewPager.getLayoutParams();
-            mlp.topMargin -= height;
-            mViewPager.setLayoutParams(mlp);
-        }
-        */
-    }
-
     private void recomputeMetrics() {
-        ViewPager.MarginLayoutParams mlp = (ViewPager.MarginLayoutParams)
-                mViewPager.getLayoutParams();
-
-        mlp.topMargin = mHeaderView.getHeight();
-        mViewPager.setLayoutParams(mlp);
+        mViewPager.setPadding(0, mTabHost.getHeight(), 0, 0);
+        //mViewPager.setPadding(0, getToolbar().getHeight(), 0, 0);
     }
 
     private void setupToolbar() {
@@ -156,7 +99,7 @@ public class TimetableActivity extends BaseActivity
 
     private void setupTab() {
         final BaseInfo baseInfo = getBaseInfoFromExtras();
-        final TimetablePagerAdapter pagerAdapter = new TimetablePagerAdapter(baseInfo);
+        final TimetablePagerAdapter pagerAdapter = new TimetablePagerAdapter(baseInfo, this);
         pagerAdapter.setOnStateChangeLister(this);
 
         mTabHost = (MaterialTabHost) this.findViewById(R.id.tabHost);
@@ -232,5 +175,82 @@ public class TimetableActivity extends BaseActivity
             firstY = mHeaderView.getHeight() - mTabHost.getHeight();
         }
     };
+
+    @Override
+    public void onUpOrCancel() {
+        if (sumY <= firstY) {
+            //まだタブ以下だったら
+            //showToolbar();
+
+        }
+
+    }
+
+    private void showToolbar() {
+        Log.d("----", "showToolbar");
+        float headerTranslationY = mHeaderView.getTranslationY();
+        if (headerTranslationY != 0) {
+            //ObjectAnimator.animate(mHeaderView).cancel();
+            ObjectAnimator.ofFloat(mHeaderView, View.TRANSLATION_Y, 0).setDuration(200).start();
+            //ViewPropertyAnimator.animate(mHeaderView).translationY(0).setDuration(200).start();
+        }
+        //propagateToolbarState(true);
+    }
+
+    private void haneiToolbar(boolean isShown) {
+        for (int i = 0; i < mViewPager.getChildCount(); i++) {
+
+            //現在見てるタブは無視する
+            if (i == mViewPager.getCurrentItem()) {
+                return;
+            }
+
+            View view = mViewPager.getChildAt(i);
+            if (view == null) {
+                return;
+            }
+
+
+
+
+        }
+    }
+
+
+    private int sumY = 0;
+
+    @Override
+    public void onScrolledTimetable(RecyclerView recyclerView, int dx, int dy) {
+        if (dy == 0) {
+            return;
+        }
+
+        if (dy > 0) {
+            //下方向にスクロール
+
+            if (sumY <= firstY) {
+                //まだタブ以下だったら
+                sumY += dy;
+                if (sumY > firstY) sumY = firstY;
+
+                mHeaderView.setTranslationY(-sumY);
+            }
+            return;
+
+        } else {
+
+            if (sumY > 0) {
+                //まだツールバー全体が見えていないなら
+                sumY += dy;
+
+                //もと画面以上の値になったら修正
+                if (sumY < 0) sumY = 0;
+
+                mHeaderView.setTranslationY(-sumY);
+            }
+            return;
+        }
+
+    }
 
 }

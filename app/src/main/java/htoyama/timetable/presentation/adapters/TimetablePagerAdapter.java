@@ -6,8 +6,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 
 import com.squareup.otto.Subscribe;
 
@@ -21,9 +23,11 @@ import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.domain.repository.TimetableDao;
 import htoyama.timetable.domain.repository.loaders.TimeableLoader;
 import htoyama.timetable.domain.repository.sqlite.TimetableSqliteDao;
+import htoyama.timetable.domain.repository.stub.TimetableDaoStub;
 import htoyama.timetable.events.BusHolder;
 import htoyama.timetable.events.LoadTimetableCompleteEvent;
 import htoyama.timetable.presentation.decorations.DividerItemDecoration;
+import htoyama.timetable.presentation.decorations.PaddingItemDecoration;
 import htoyama.timetable.utils.TimeUtils;
 
 
@@ -39,12 +43,15 @@ public class TimetablePagerAdapter extends PagerAdapter{
     private DividerItemDecoration mDividerItemDecoration;
     private BaseInfo mBaseInfo;
 
+    private OnUpOrCancelListener mOnUpOrCancelListener;
+
     public static interface OnStateChangeListener {
         public void onScrolledTimetable(RecyclerView recyclerView, int dx, int dy);
     }
 
-    public TimetablePagerAdapter(BaseInfo baseInfo) {
+    public TimetablePagerAdapter(BaseInfo baseInfo, OnUpOrCancelListener listener) {
         mBaseInfo = baseInfo;
+        mOnUpOrCancelListener = listener;
     }
 
     @Override
@@ -73,13 +80,14 @@ public class TimetablePagerAdapter extends PagerAdapter{
         mTimetableRecyclerView = (RecyclerView) view.findViewById(R.id.pager_item_timetable_list);
 
         DayType dayType = DayType.valueOf(position);
-        TimetableDao timetableDao = new TimetableSqliteDao(view.getContext());
+        //TimetableDao timetableDao = new TimetableSqliteDao(view.getContext());
+        TimetableDao timetableDao = new TimetableDaoStub();
         Timetable timetable = timetableDao.findBy(mBaseInfo.id, dayType);
         setupTimetable(context, timetable);
 
         String currentHhMm = TimeUtils.stringizeDepatureTime(new Date());
         int closePosition = mTimetableAdapter.getClosePosition(currentHhMm);
-        mTimetableRecyclerView.scrollToPosition(closePosition);
+        //mTimetableRecyclerView.scrollToPosition(closePosition);
 
         return view;
     }
@@ -98,13 +106,28 @@ public class TimetablePagerAdapter extends PagerAdapter{
             mDividerItemDecoration = new DividerItemDecoration(context);
         }
 
-        mTimetableAdapter = new TimetableAdapter(timetable);
+        View headerView = LayoutInflater.from(context).inflate(R.layout.list_padding, null);
+
+        mTimetableAdapter = new TimetableAdapter(timetable, headerView);
 
         mTimetableRecyclerView.setHasFixedSize(true);
         mTimetableRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mTimetableRecyclerView.setAdapter(mTimetableAdapter);
         mTimetableRecyclerView.setAnimation(null);
         mTimetableRecyclerView.addItemDecoration(mDividerItemDecoration);
+
+        mTimetableRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getActionMasked()) {
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        mOnUpOrCancelListener.onUpOrCancel();
+
+                }
+                return false;
+            }
+        });
 
         mTimetableRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -115,6 +138,10 @@ public class TimetablePagerAdapter extends PagerAdapter{
             }
         });
 
+    }
+
+    public static interface OnUpOrCancelListener {
+        public void onUpOrCancel();
     }
 
 }

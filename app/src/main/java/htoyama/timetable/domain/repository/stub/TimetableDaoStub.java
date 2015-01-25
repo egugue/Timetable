@@ -21,9 +21,11 @@ public class TimetableDaoStub implements TimetableDao {
     @Override
     public Timetable findBy(int baseId) {
         final Timetable timetable = new Timetable();
+        /*
         if (baseId != 1) {
             return timetable;
         }
+        */
 
         for(int i = 0; i < 30; i++) {
             Time time = new Time(baseId, DayType.WEEKDAY, TrainType.EXPRESS, i+":00", "新宿行き");

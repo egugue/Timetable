@@ -13,16 +13,18 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import htoyama.timetable.R;
 import htoyama.timetable.domain.models.Time;
-import htoyama.timetable.domain.models.Timetable;
 import htoyama.timetable.utils.TimeUtils;
 
 /**
  * Created by toyamaosamuyu on 2014/12/26.
  */
-public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.ViewHolder>{
+public class TimetableAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final String TAG = TimetableAdapter.class.getSimpleName();
+    private static final int VIEW_TYPE_HEADER = 0;
+    private static final int VIEW_TYPE_ITEM = 1;
 
     private List<Time> mList;
+    private View mHeaderView;
 
     public TimetableAdapter() {
         mList = new ArrayList<>();
@@ -32,22 +34,42 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
         mList = list;
     }
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_timetable, parent, false);
-
-        return new ViewHolder(itemView);
+    public TimetableAdapter(List<Time> list, View headerView) {
+        mList = list;
+        mHeaderView = headerView;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind( mList.get(position), position );
+    public int getItemViewType(int position) {
+        return (position == 0) ? VIEW_TYPE_HEADER : VIEW_TYPE_ITEM;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        if (viewType == VIEW_TYPE_HEADER) {
+            return new HeaderViewHolder(mHeaderView);
+        }
+
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_item_timetable, parent, false);
+        return new ItemViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof ItemViewHolder) {
+            ((ItemViewHolder) holder).bind( mList.get(position-1), position-1 );
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mList.size();
+        if (mHeaderView == null) {
+            return mList.size();
+        } else {
+            return mList.size() + 1;
+        }
     }
 
     /**
@@ -69,7 +91,7 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
     }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ItemViewHolder extends RecyclerView.ViewHolder {
 
         @InjectView(R.id.list_item_timetable_depature_time)
         TextView mDepartureTimeTextView;
@@ -78,7 +100,7 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
         @InjectView(R.id.list_item_timetable_destination)
         TextView mDestinationTextView;
 
-        public ViewHolder(View itemView) {
+        public ItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
         }
@@ -87,6 +109,12 @@ public class TimetableAdapter extends RecyclerView.Adapter<TimetableAdapter.View
             mDepartureTimeTextView.setText(item.depatureTime);
             mTrainTypeTextView.setText(item.trainType.name+position);
             mDestinationTextView.setText(item.destination);
+        }
+    }
+
+    private static class HeaderViewHolder extends RecyclerView.ViewHolder {
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
         }
     }
 
