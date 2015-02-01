@@ -74,16 +74,27 @@ public class TopItemLoader {
 
         for (BaseInfo baseInfo : baseInfoList) {
 
-            Timetable timetable = mTimetableDao.findBy(baseInfo.id, currentHhMm24);
-            if (timetable.isEmpty()) {
-                //0時表記で再度検索し、早朝のタイムテーブルを取得する
-                timetable = mTimetableDao.findBy(baseInfo.id, currentHhMm00);
+            Timetable timetable = getTimtable(baseInfo.id);
+            if (!timetable.isEmpty()) {
+                topItemList.add(new TopItem(baseInfo, timetable));
             }
-
-            topItemList.add(new TopItem(baseInfo, timetable));
         }
 
         return topItemList;
+    }
+
+    private Timetable getTimtable(int baseInfoId) {
+        final String currentHhMm24 = TimeUtils.stringizeDepatureTime(new Date());
+        final String currentHhMm00 = TimeUtils.convertMidnightTimeIfNeeded(currentHhMm24, true);
+
+        Timetable timetable = mTimetableDao.findBy(baseInfoId, currentHhMm24);
+        if (timetable.isEmpty()) {
+            //0時表記で再度検索し、早朝のタイムテーブルを取得する
+            timetable = mTimetableDao.findBy(baseInfoId, currentHhMm00);
+        }
+
+        return timetable;
+
     }
 
 }
