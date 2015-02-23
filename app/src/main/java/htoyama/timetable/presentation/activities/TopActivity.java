@@ -28,6 +28,7 @@ import htoyama.timetable.events.BusHolder;
 import htoyama.timetable.events.ChangeTimetableDataCompleteEvent;
 import htoyama.timetable.events.ClickTopItemEvent;
 import htoyama.timetable.events.LoadTopItemListCompleteEvent;
+import htoyama.timetable.presentation.listeners.SwipeableRecyclerViewTouchListener;
 import htoyama.timetable.presentation.views.StateFrameLayout;
 import htoyama.timetable.presentation.views.TimetableCardListView;
 
@@ -59,6 +60,9 @@ public class TopActivity extends BaseActivity {
         BusHolder.getBus().register(this);
 
         setupSwipeRefreshLayout();
+        mTimetableCardListView.addOnItemTouchListener(
+                new SwipeableRecyclerViewTouchListener(mTimetableCardListView, mOnSwipeListener)
+        );
         loadListItem();
 
         ViewTreeObserver vto = mWrapingFrameLayout.getViewTreeObserver();
@@ -83,7 +87,7 @@ public class TopActivity extends BaseActivity {
 
     @OnClick(R.id.fab_add_timetable)
     public void onAddTimetableButton() {
-        startActivity( InputActivity.createIntent(this) );
+        startActivity(InputActivity.createIntent(this));
     }
 
     @Subscribe
@@ -172,6 +176,21 @@ public class TopActivity extends BaseActivity {
         public void onGlobalLayout() {
             recomputeMetrics();
             mWrapingFrameLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        }
+    };
+
+    private SwipeableRecyclerViewTouchListener.OnSwipeListener mOnSwipeListener
+            = new SwipeableRecyclerViewTouchListener.OnSwipeListener() {
+        @Override
+        public boolean canSwipe(int position) {
+            return position == 0 ? false : true;
+        }
+
+        @Override
+        public void onDismiss(int[] dismissPositions) {
+            for (int position : dismissPositions) {
+                mTimetableCardListView.remove(position);
+            }
         }
     };
 
