@@ -35,13 +35,18 @@ public class TimetableCardListView extends RecyclerView{
         mAdapter.addAll(list);
     }
 
+    public void remove(int position) {
+        mAdapter.remove(position);
+    }
+
     private void initialize() {
         mAdapter = new TopItemAdapter();
 
         setHasFixedSize(true);
         setLayoutManager(new LinearLayoutManager(getContext()));
         setAdapter(mAdapter);
-        //setAnimation(null);
+        setAnimation(null);
+        setItemAnimator(null);
         addItemDecoration(
                 new PaddingItemDecoration(
                         getResources().getDimensionPixelSize(R.dimen.spacing_medium))
@@ -61,30 +66,6 @@ public class TimetableCardListView extends RecyclerView{
                     }
                 }
         ));
-
-        /*
-        SwipeDismissRecyclerViewTouchListener listener = new SwipeDismissRecyclerViewTouchListener(this,
-                new SwipeDismissRecyclerViewTouchListener.DismissCallbacks() {
-                    @Override
-                    public boolean canDismiss(int position) {
-                        //for header
-                        if (position == 0) return false;
-
-                        return true;
-                    }
-
-                    @Override
-                    public void onDismiss(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                        for (int position : reverseSortedPositions) {
-                            mAdapter.remove(position);
-                        }
-                        //mAdapter.notifyDataSetChanged();
-                    }
-                });
-
-        setOnTouchListener(listener);
-        setOnScrollListener(listener.makeScrollListener());
-                */
     }
 
 }

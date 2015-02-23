@@ -2,13 +2,12 @@ package htoyama.timetable.presentation.adapters;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -27,8 +26,7 @@ import htoyama.timetable.presentation.views.TimetableLayout;
 /**
  * Created by toyamaosamuyu on 2014/12/30.
  */
-public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-
+public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = TopItemAdapter.class.getSimpleName();
     private static final int VIEW_TYPE_HEADER = 0;
     private static final int VIEW_TYPE_ITEM = 1;
@@ -49,18 +47,19 @@ public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public void add(TopItem item, int index) {
-        mList.add(index-1, item);
+        mList.add(index - 1, item);
         notifyItemInserted(index);
     }
 
     /**
      * 表示されているTopItemを取得する
+     *
      * @param index 何番目のTopItemか　ただし0はヘッダーなので入れないこと
      * @return
      */
     public TopItem getItem(int index) {
         if (index == 0 || getItemCount() < index) {
-            return  null;
+            return null;
         }
 
         index--; //decrement for header
@@ -68,9 +67,7 @@ public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public void remove(int index) {
-        int a = index--;
-        mList.remove(a);
-        //notifyItemChanged(index);
+        mList.remove(index - 1);
         notifyItemRemoved(index);
     }
 
@@ -97,7 +94,7 @@ public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             default:
                 position--; //minus for header
-                ((ItemViewHolder) holder).bind( mList.get(position) );
+                ((ItemViewHolder) holder).bind(mList.get(position));
                 break;
         }
 
@@ -145,7 +142,7 @@ public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         //すでに画面に表示したアイテムの位置
         private static int sShowedPosition = -1;
 
-        private CardView mCardView;
+        private LinearLayout mCardView;
         private ImageView mThumbnailImageView;
         private TextView mStationTextView;
         private TextView mBoundForNameTextView;
@@ -154,7 +151,7 @@ public class TopItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public ItemViewHolder(final View itemView) {
             super(itemView);
 
-            mCardView = (CardView) itemView.findViewById(R.id.card_view);
+            mCardView = (LinearLayout) itemView.findViewById(R.id.card_view);
             mThumbnailImageView = (ImageView) itemView.findViewById(R.id.list_item_card_big_thumbnail);
             mStationTextView = (TextView) itemView.findViewById(R.id.list_item_card_station);
             mBoundForNameTextView = (TextView) itemView.findViewById(R.id.list_item_card_bound_for_name);

@@ -1,77 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<!-- To swipe to dismiss CardView, CardView is wrapped in LinearLayout-->
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardCornerRadius="4dp">
+    android:layout_height="wrap_content" >
 
-    <RelativeLayout
+    <android.support.v7.widget.CardView
+        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="4dp">
 
-        <ImageView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:id="@+id/list_item_card_big_thumbnail"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/shibuya_02"
-            />
+            android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/list_item_card_big_thumbnail"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:orientation="horizontal"
-            android:background="@drawable/dark_scrim"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="六本木駅"
-                android:id="@+id/list_item_card_station"
-                android:textSize="20dp"
-                android:textColor="@color/white"
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:id="@+id/list_item_card_big_thumbnail"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/shibuya_02"
                 />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="新宿・光が丘方面"
-                android:id="@+id/list_item_card_bound_for_name"
-                android:textSize="20dp"
-                android:textColor="@color/white"
-                android:layout_marginLeft="16dp"
+                android:layout_alignBottom="@+id/list_item_card_big_thumbnail"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:orientation="horizontal"
+                android:background="@drawable/dark_scrim"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="六本木駅"
+                    android:id="@+id/list_item_card_station"
+                    android:textSize="20dp"
+                    android:textColor="@color/white"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="新宿・光が丘方面"
+                    android:id="@+id/list_item_card_bound_for_name"
+                    android:textSize="20dp"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="16dp"
+                    />
+
+            </LinearLayout>
+
+            <htoyama.timetable.presentation.views.TimetableLayout
+                android:id="@+id/list_item_card_timetable_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/list_item_card_big_thumbnail"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:paddingTop="@dimen/spacing_small"
+                android:paddingBottom="@dimen/spacing_small"
+                android:paddingRight="@dimen/spacing_medium"
+                android:paddingLeft="@dimen/spacing_medium"
+                app:maxItems="3"
                 />
 
-        </LinearLayout>
+        </RelativeLayout>
 
-        <htoyama.timetable.presentation.views.TimetableLayout
-            android:id="@+id/list_item_card_timetable_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/list_item_card_big_thumbnail"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:paddingTop="@dimen/spacing_small"
-            android:paddingBottom="@dimen/spacing_small"
-            android:paddingRight="@dimen/spacing_medium"
-            android:paddingLeft="@dimen/spacing_medium"
-            app:maxItems="3"
-            />
+    </android.support.v7.widget.CardView>
 
-    </RelativeLayout>
-
-</android.support.v7.widget.CardView>
+</LinearLayout>
